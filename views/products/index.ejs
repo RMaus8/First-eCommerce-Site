@@ -1,0 +1,34 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>Index page!</h1>
+    
+            <a class="btn btn-primary" href="/products/new">Add a new product</a>
+        </div>
+    </header>
+    
+    <div class="row text-center" style="display: flex; flex-wrap: wrap;">
+        <% products.forEach(function(product){ %>
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <img src="<%= product.image %>">
+                    <div class="caption">
+                        <h2><%= product.name %></h2>
+                        <h3>$<%= product.price %></h3>
+                    </div>
+                    <a href="/products/show">View More</a>
+                </div> 
+            </div>
+
+    
+        <% }) %>
+    </div>
+    
+</div>
+
+
+
+
+<% include ../partials/footer %>
