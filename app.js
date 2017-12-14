@@ -6,54 +6,65 @@ var express     = require("express"),
     passport    = require("passport"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
+    multer = require("multer"),
+    path = require("path"),
     Product = require("./models/product"),
+    User = require("./models/user"),
     seedDB = require("./seeds");
     
-// var productRoutes = require("./routes/products")
-    
+var productRoutes = require("./routes/products"),
+    indexRoutes = require("./routes/index");
+
+
+
 mongoose.connect("mongodb://localhost/eriks_website", {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
 seedDB();
 
-app.get("/", function(req, res){
-    res.render("landing");
+app.use(require("express-session")({
+    secret: "Zola and Milo are my special dogs",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());   
+passport.deserializeUser(User.deserializeUser());
+
+
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
+    next();
 });
 
-app.get("/products", function(req, res){
-    Product.find({}, function(err, allProducts){
-        if(err){
-            console.log(err);
-        } else {
-            res.render("products/index", {products: allProducts});
-        }
-    });
+
+app.use("/", indexRoutes);
+app.use("/products", productRoutes);
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/Adminloginpage");
+}
+
+app.get("/about", function(req, res) {
+    res.render("about");
 });
 
-app.get("/products/new", function(req, res) {
-    res.render("products/new");
+app.get("/contact", function(req, res) {
+    res.render("contact");
 });
-
-app.post("/products", function(req, res){
-    var name = req.body.name;
-    var image = req.body.image;
-    var price = req.body.price;
-    var desc = req.body.description;
-    var newProduct = {name: name, image: image, price: price, description: desc};
-    Product.create(newProduct, function(err, newlyCreatedProduct){
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect("/products");
-        }
-    })
-})
-
-// app.use("/products", productRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server started");

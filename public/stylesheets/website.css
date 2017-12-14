@@ -7,7 +7,7 @@
 
 }
 
-#padded {
+.padded {
 	width: 50%; 
 	margin: 30px auto;
 }
@@ -17,7 +17,7 @@
 }
 
 body {
-
+	background-color: #d3e4ff;
 	background-size: cover;
 	background-position: center;
 	font-family: merriweather;
@@ -39,4 +39,12 @@ hr	{
 	border-top: 1px solid #f8f8f8;
 	border-bottom: 1px solid rgba(0,0,0,0.2);
 	background-color: #0C0C07;
+}
+
+#marginBottom {
+	margin-bottom: 10px;
+}
+
+#marginTop {
+	margin-top: 10px;
 }

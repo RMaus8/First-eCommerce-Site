@@ -4,8 +4,9 @@
     <header class="jumbotron">
         <div class="container">
             <h1>Index page!</h1>
-    
+            <% if(currentUser && currentUser.isAdmin){ %>
             <a class="btn btn-primary" href="/products/new">Add a new product</a>
+            <% } %>
         </div>
     </header>
     
@@ -13,12 +14,12 @@
         <% products.forEach(function(product){ %>
             <div class="col-md-3">
                 <div class="thumbnail">
-                    <img src="<%= product.image %>">
+                    <img id="marginTop" src="<%= product.image %>">
                     <div class="caption">
                         <h2><%= product.name %></h2>
                         <h3>$<%= product.price %></h3>
                     </div>
-                    <a href="/products/show">View More</a>
+                    <a id="marginBottom" class="btn btn-primary" href="/products/<%= product._id %>">View More</a>
                 </div> 
             </div>
 
