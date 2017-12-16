@@ -43,4 +43,9 @@ middlewareObj.isLoggedInAdmin = function(req, res, next){
     res.redirect("/login");
 }
 
+middlewareObj.usernameToLowerCase = function(req, res, next){
+    req.body.username = req.body.username.toLowerCase();
+    next();
+}
+
 module.exports = middlewareObj;

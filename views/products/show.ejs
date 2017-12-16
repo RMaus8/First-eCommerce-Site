@@ -19,8 +19,8 @@
                     <br>
                     <p><%= product.description %></p>
                     <% if(currentUser && currentUser.isAdmin){ %>
-                        <a class="btn btn-xs btn-warning" href="/campgrounds/<%= product._id %>/edit">Edit</a>
-                        <form class="deleteform" action="/campgrounds/<%= product._id %>?_method=DELETE" method="POST">
+                        <a class="btn btn-xs btn-warning" href="/products/<%= product._id %>/edit">Edit</a>
+                        <form class="deleteform" action="/products/<%= product._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-xs btn-danger">Delete</button>
                         </form>
                     <% } %>

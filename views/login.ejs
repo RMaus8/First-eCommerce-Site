@@ -2,14 +2,20 @@
 
 <div class="container">
     <div class="padded">
-        <form action="/login" method="POST">
+        <form class="registerForm" action="/login" method="POST">
+            <label>Username</label>
             <div class="form-group">
                 <input class="form-control" type="text" name="username" placeholder="username">
             </div>
+            <label>Password</label>
             <div class="form-group">
                 <input class="form-control" type="password" name="password" placeholder="password">
             </div>
-            <button class="btn btn-success">Login</button>
+            <div>
+                <button class="btn btn-success">Login</button>
+                <a class="pull-right" href="/forgot">Forgot Password?</a>
+            </div>
+            
         </form>
     </div>
 </div>

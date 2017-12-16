@@ -2,17 +2,38 @@
 
 <div class="container">
     <div class="padded">
-        <form action="/register" method="POST">
+        <form class="registerForm" action="/register" method="POST">
+            <label>First Name</label>
+            <div class="form-group">
+                <input class="form-control" type="text" name="firstName" placeholder="first name">
+            </div>
+            <label>Last Name</label>
+            <div class="form-group">
+                <input class="form-control" type="text" name="lastName" placeholder="last name">
+            </div>
+            <label>Email Address</label>
+            <div class="form-group">
+                <input class="form-control" type="text" name="email" placeholder="email@somedomain.com">
+            </div>
+            <label>Username</label>
             <div class="form-group">
                 <input class="form-control" type="text" name="username" placeholder="username">
             </div>
+            <label>Password</label>
             <div class="form-group">
                 <input class="form-control" type="password" name="password" placeholder="password">
             </div>
-            <!--<div class="form-group">-->
-            <!--    <input class="form-control" type="text" name="adminCode" placeholder="Admin Code">-->
-            <!--</div>-->
-            <button class="btn btn-success">Login</button>
+            <label>Re-enter Password</label>
+            <div class="form-group">
+                <input class="form-control" type="password" name="confirmPassword" placeholder="confirm password">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="adminCode" placeholder="Admin Code">
+            </div>
+            <div>
+                <button class="btn btn-success">Login</button>
+                <a class="pull-right" href="/login">Already have an account? Login here!</a>
+            </div>
         </form>
     </div>
 </div>

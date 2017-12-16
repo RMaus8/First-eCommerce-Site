@@ -15,8 +15,6 @@ var express     = require("express"),
 var productRoutes = require("./routes/products"),
     indexRoutes = require("./routes/index");
 
-
-
 mongoose.connect("mongodb://localhost/eriks_website", {useMongoClient: true});
 mongoose.Promise = global.Promise;
 

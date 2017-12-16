@@ -42,13 +42,56 @@ function checkFileType(file, callback){
     
 //Index Route
 router.get("/", function(req, res){
-    Product.find({}, function(err, allProducts){;
-        if(err){
-            console.log(err);
-        } else {
-            res.render("products/index", {products: allProducts});
-        }
-    });
+    var perPage = 8;
+    var pageQuery = parseInt(req.query.page);
+    var pageNumber = pageQuery ? pageQuery : 1;
+    var noMatch = null;
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Product.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+            if(err){
+                console.log(err);
+            } else {
+                Product.count({name: regex}).exec(function (err, count){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        if(allProducts.length < 1){
+                            noMatch = "No products match that query, please try again.";
+                        }
+                        res.render("products/index", {
+                            products: allProducts,
+                            current: pageNumber,
+                            pages: Math.ceil(count / perPage),
+                            noMatch: noMatch,
+                            search: req.query.search
+                        });
+                    };
+                })
+            }
+        });
+    } else {
+        Product.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+            if(err){
+                console.log(err)
+            } else {
+                Product.count({}).exec(function (err, count){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        res.render("products/index", {
+                            products: allProducts,
+                            current: pageNumber,
+                            pages: Math.ceil(count / perPage),
+                            noMatch: noMatch,
+                            search: false
+                            
+                        });
+                    };
+                });
+            }
+        });
+    }
 });
 
 //New Route
@@ -95,5 +138,42 @@ router.get("/:id", function(req, res){
     });
 });
 
+//edit route
+router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
+    Product.findById(req.params.id, function(err, foundProduct){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("products/edit", {product: foundProduct});
+        }
+    });
+});
+
+//update route
+router.put("/:id", middleware.isLoggedInAdmin, function(req, res){
+    Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct){
+        if(err){
+            console.log(err);
+            res.redirect("/products");
+        } else {
+            res.redirect("/products/" + req.params.id);
+        }
+    });
+});
+
+//delete route
+router.delete("/:id", middleware.isLoggedInAdmin, function(req, res){
+    Product.findByIdAndRemove(req.params.id, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            res.redirect("/products");
+        }
+    });
+});
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 module.exports = router;

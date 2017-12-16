@@ -7,13 +7,38 @@
 
 }
 
+h1 {
+	text-align: center;
+}
+
+.crop {
+	height: 400px;
+	width: 300px;
+	overflow: hidden;
+}
+
+.crop img{
+	margin-top: 20px;
+	height: 200px;
+	width: auto;
+}
+
+.registerForm {
+	background-color: #eaeaea;
+	border-style: solid;
+	padding: 20px 50px;
+	border-radius: 10px;
+	border-width: .5px;
+	border-color: gray;
+}
+
 .padded {
 	width: 50%; 
 	margin: 30px auto;
 }
 
 .addMargin {
-	margin: 20px;
+	margin: 15px;
 }
 
 body {
