@@ -14,8 +14,10 @@ var express     = require("express"),
     
 var productRoutes = require("./routes/products"),
     indexRoutes = require("./routes/index");
+    
+    // "mongodb://localhost/eriks_website"
 
-mongoose.connect("mongodb://localhost/eriks_website", {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
