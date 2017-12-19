@@ -5,6 +5,7 @@ var express     = require("express"),
     flash = require("connect-flash"),
     passport    = require("passport"),
     LocalStrategy = require("passport-local"),
+    mailgun = require("mailgun"),
     methodOverride = require("method-override"),
     multer = require("multer"),
     path = require("path"),
@@ -13,6 +14,7 @@ var express     = require("express"),
     seedDB = require("./seeds");
     
 var productRoutes = require("./routes/products"),
+    tableRoutes = require("./routes/products/tables"),
     indexRoutes = require("./routes/index");
     
     // "mongodb://localhost/eriks_website"
@@ -49,6 +51,7 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
+app.use("/products/tables", tableRoutes);
 app.use("/products", productRoutes);
 
 function isLoggedIn(req, res, next){

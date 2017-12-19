@@ -2,6 +2,7 @@ var mongoose = require("mongoose"),
     express = require("express"),
     router = express.Router(),
     passport = require("passport"),
+    mailgun = require("mailgun.js"),
     middleware = require("../middleware"),
     User = require("../models/user"),
     Product = require("../models/product"),
@@ -9,6 +10,21 @@ var mongoose = require("mongoose"),
     nodemailer = require("nodemailer"),
     crypto = require("crypto");
     
+var mailgun = require("mailgun-js");
+var api_key = process.env.MAILGUN_API_KEY;
+var DOMAIN = 'mg.bobbymdesigns.com';
+var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+// var data = {
+//   from: 'Excited User <me@samples.mailgun.org>',
+//   to: 'bar@example.com, rmausolf06@gmail.com',
+//   subject: 'Hello',
+//   text: 'Testing some Mailgun awesomness!'
+// };
+
+// mailgun.messages().send(data, function (error, body) {
+//   console.log(body);
+// });
 
 router.get("/", function(req, res){
     res.render("landing");
@@ -86,26 +102,24 @@ router.post("/forgot", function(req, res) {
             });
         },
         function(token, user, done) {
-            var smtpTransport = nodemailer.createTransport({
-                service: "Gmail",
-                auth: {
-                    user: 'rmausolf06@gmail.com',
-                    pass: process.env.GMAILPW
-                }
-            });
-            var mailOptions = {
+            // var mg = mailgun.client({
+            //     username: 'api',
+            //     key: process.env.MAILGUN_API_KEY || 'key-d10ff657dad15f5af086689c533cb4ed',
+            //     public_key: process.env.MAILGUN_PUBLIC_KEY || ''
+            // });
+            var data = {
                 to: user.email,
-                from: 'rmausolf06@gmail.com',
+                from: 'Password Reset <passwordreset@bobbymdesigns.com>',
                 subject: 'Account Password Reset',
-                text: 'You are receiving this because you (or someone else) have requested the reset of the password associated with this email' +
-                    'Please click on the following link, or copy and paste it into your browser to complete the reset process' +
-                    'http://' + req.headers.host + '/reset/' + token + '/n/n' +
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password associated with this email.' + '\n' +
+                    'Please click on the following link, or copy and paste it into your browser to complete the reset process: ' +
+                    'http://' + req.headers.host + '/reset/' + token + '\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged'
             };
-            smtpTransport.sendMail(mailOptions, function(err){
-                console.log("mail sent");
+            mailgun.messages().send(data, function (error, body) {
+        //     function(err){
                 req.flash("success", "An email has been sent to " + user.email + " with reset instructions");
-                done(err, "done");
+                done(error, "done");
             });
         }
     ], function(err){
@@ -113,5 +127,63 @@ router.post("/forgot", function(req, res) {
         res.redirect("/forgot");
     });
 });
+
+//edit password
+router.get("/reset/:token", function(req, res) {
+    User.findOne({resetPasswordToken: req.params.token}, function(err, foundUser){
+        if(err){
+            req.flash("error", "User not found");
+            res.redirect("/forgot");
+        } else {
+            res.render("reset", {user: foundUser});
+        }
+    });
+});
+
+//update password
+router.post("/reset/:token", function(req, res){
+    async.waterfall([
+        function(done){
+            User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() }}, function(err, foundUser) {
+                if(!foundUser){
+                    req.flash("error", "Password reset link expired. Please request a new password reset link.");
+                    res.redirect("/forgot");
+                } 
+                if(req.body.newPassword === req.body.confirmNewPassword){
+                    foundUser.setPassword(req.body.newPassword, function(err){
+                        foundUser.resetPasswordExpires = undefined;
+                        foundUser.resetPasswordToken = undefined;
+                        foundUser.save(function(err){
+                            req.logIn(foundUser, function(err){
+                                done(err, foundUser);
+                            });
+                        });
+                    });
+                } else {
+                    req.flash("error", "Password fields do not match, please try again.");
+                    res.redirect("back");
+                }
+            });
+        },
+        function(foundUser, done) {
+
+            var data = {
+                to: foundUser.email,
+                from: 'Password Reset <passwordreset@bobbymdesigns.com>',
+                subject: 'Account Password Has Been Reset',
+                text: 'You are receiving this because you (or someone else) have just reset the password of the account associated with this email.' + '\n' +
+                    'If you did not reset your password, please let us know immediately so we may resolve the issue.'
+            };
+            mailgun.messages().send(data, function (error, body) {
+        //     function(err){
+                req.flash("success", "Password has been reset!");
+                done(error, "done");
+            });
+        }, function(err){
+            res.redirect("/");
+        }
+    ]);
+});
+
 
 module.exports = router;

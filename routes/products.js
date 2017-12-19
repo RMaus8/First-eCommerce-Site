@@ -172,6 +172,10 @@ router.delete("/:id", middleware.isLoggedInAdmin, function(req, res){
     });
 });
 
+router.get("/crafts", function(req, res) {
+    res.render("crafts");
+});
+
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };

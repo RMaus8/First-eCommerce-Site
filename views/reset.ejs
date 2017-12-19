@@ -1,0 +1,24 @@
+<% include ./partials/header %>
+
+<div class="container">
+    <div class="padded">
+        <form class="registerForm" action="/reset/<%= user.resetPasswordToken %>" method="POST">
+            <legend>Forgot Password</legend>
+            <div class="form-group">
+                <label>Email</label>
+                <h4><%= user.email %></h4>
+                <label>New Password</label>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="newPassword" placeholder="new password">
+                </div>
+                <label>Re-enter New Password</label>
+                <div class="form-group">
+                    <input class="form-control" type="password" name="confirmNewPassword" placeholder="confirm new password">
+                </div>
+            </div>
+            <button class="btn btn-success">Update Password</button>
+        </form>
+    </div>
+</div>
+
+<% include ./partials/footer %>
