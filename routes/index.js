@@ -15,22 +15,9 @@ var api_key = process.env.MAILGUN_API_KEY;
 var DOMAIN = 'mg.bobbymdesigns.com';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-// var data = {
-//   from: 'Excited User <me@samples.mailgun.org>',
-//   to: 'bar@example.com, rmausolf06@gmail.com',
-//   subject: 'Hello',
-//   text: 'Testing some Mailgun awesomness!'
-// };
-
-// mailgun.messages().send(data, function (error, body) {
-//   console.log(body);
-// });
-
 router.get("/", function(req, res){
     res.render("landing");
 });
-
-
 
 router.get("/login", function(req, res) {
     res.render("login");

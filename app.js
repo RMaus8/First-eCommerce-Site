@@ -15,6 +15,7 @@ var express     = require("express"),
     
 var productRoutes = require("./routes/products"),
     tableRoutes = require("./routes/products/tables"),
+    soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
     
     // "mongodb://localhost/eriks_website"
@@ -53,21 +54,8 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/products/tables", tableRoutes);
 app.use("/products", productRoutes);
+app.use("/", soloRoutes);
 
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/Adminloginpage");
-}
-
-app.get("/about", function(req, res) {
-    res.render("about");
-});
-
-app.get("/contact", function(req, res) {
-    res.render("contact");
-});
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server started");
