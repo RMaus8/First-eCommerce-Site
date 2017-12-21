@@ -20,7 +20,7 @@ router.get("/", function(req, res){
 });
 
 router.get("/login", function(req, res) {
-    res.render("login");
+    res.render("user/login");
 });
 
 router.post("/login", middleware.usernameToLowerCase, passport.authenticate("local",
@@ -31,7 +31,7 @@ router.post("/login", middleware.usernameToLowerCase, passport.authenticate("loc
 });
 
 router.get("/register", function(req, res) {
-    res.render("register");
+    res.render("user/register");
 });
 
 router.post("/register", middleware.usernameToLowerCase, function(req, res){
@@ -43,7 +43,7 @@ router.post("/register", middleware.usernameToLowerCase, function(req, res){
         User.register(newUser, req.body.password, function(err, user){
             if(err){
                 console.log(err);
-                return res.render("register");
+                return res.render("user/register");
             }
             passport.authenticate("local")(req, res, function(){
                 res.redirect("/products");
@@ -62,7 +62,7 @@ router.get("/logout", function(req, res) {
 });
 
 router.get("/forgot", function(req, res){
-    res.render("forgot");
+    res.render("user/forgot");
 });
 
 router.post("/forgot", function(req, res) {
@@ -122,7 +122,7 @@ router.get("/reset/:token", function(req, res) {
             req.flash("error", "User not found");
             res.redirect("/forgot");
         } else {
-            res.render("reset", {user: foundUser});
+            res.render("user/reset", {user: foundUser});
         }
     });
 });
