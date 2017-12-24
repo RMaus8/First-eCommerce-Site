@@ -11,6 +11,7 @@
             <div class="form-group">
                 <input class="form-control" type="password" name="password" placeholder="password">
             </div>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div>
                 <button class="btn btn-success">Login</button>
                 <a class="pull-right" href="/forgot">Forgot Password?</a>

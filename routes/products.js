@@ -5,7 +5,11 @@ var mongoose = require("mongoose"),
     middleware = require("../middleware"),
     path = require("path"),
     User = require("../models/user"),
+    Cart = require("../models/cart"),
+    csrf = require("csurf"),
     Product = require("../models/product");
+    
+var csrfProtection = csrf();
 
 //create the multer storage space
 const storage = multer.diskStorage({
@@ -169,6 +173,21 @@ router.delete("/:id", middleware.isLoggedInAdmin, function(req, res){
         } else {
             res.redirect("/products");
         }
+    });
+});
+
+router.get("/add-to-cart/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    
+    Product.findById(productId, function (err, product){
+        if(err){
+            return res.redirect("/");
+        }
+        cart.add(product, product.id);
+        req.session.cart = cart;
+        console.log(req.session.cart);
+        res.redirect("/products")
     });
 });
 

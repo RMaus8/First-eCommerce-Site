@@ -13,8 +13,10 @@
         <div class="col-md-9">
             <div class="thumbnail">
                 <img class="img-responsive" src="<%= product.image %>">
+                <a class="btn btn-primary" href="/products/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>
                 <div class="caption-full">
                     <h4 class="pull-right">$<%= product.price %></h4>
+                    
                     <h3><a><%= product.name %></a></h3>
                     <br>
                     <p><%= product.description %></p>

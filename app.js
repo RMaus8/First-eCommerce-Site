@@ -1,5 +1,6 @@
 var express     = require("express"),
     app         = express(),
+    session = require("express-session"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     flash = require("connect-flash"),
@@ -7,6 +8,7 @@ var express     = require("express"),
     LocalStrategy = require("passport-local"),
     mailgun = require("mailgun"),
     methodOverride = require("method-override"),
+    MongoStore = require("connect-mongo")(session),
     multer = require("multer"),
     path = require("path"),
     Product = require("./models/product"),
@@ -30,11 +32,14 @@ app.use(methodOverride("_method"));
 app.use(flash());
 seedDB();
 
-app.use(require("express-session")({
+app.use(session({
     secret: "Zola and Milo are my special dogs",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    cookie: { maxAge: 180 * 60 * 1000 }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -47,6 +52,7 @@ app.use(function(req, res, next){
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
+    res.locals.session = req.session;
     next();
 });
 

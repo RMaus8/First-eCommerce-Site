@@ -6,12 +6,18 @@ var mongoose = require("mongoose"),
     middleware = require("../middleware"),
     User = require("../models/user"),
     Product = require("../models/product"),
+    Cart = require("../models/cart"),
     async = require("async"),
     nodemailer = require("nodemailer"),
+    csrf = require("csurf"),
     crypto = require("crypto");
-    
+
+var csrfProtection = csrf();
+router.use(csrfProtection);
+
 var mailgun = require("mailgun-js");
 var api_key = process.env.MAILGUN_API_KEY;
+//MAILGUN_API_KEY=key-d10ff657dad15f5af086689c533cb4ed
 var DOMAIN = 'mg.bobbymdesigns.com';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
@@ -20,7 +26,7 @@ router.get("/", function(req, res){
 });
 
 router.get("/login", function(req, res) {
-    res.render("user/login");
+    res.render("user/login", {csrfToken: req.csrfToken()});
 });
 
 router.post("/login", middleware.usernameToLowerCase, passport.authenticate("local",
@@ -31,7 +37,7 @@ router.post("/login", middleware.usernameToLowerCase, passport.authenticate("loc
 });
 
 router.get("/register", function(req, res) {
-    res.render("user/register");
+    res.render("user/register", {csrfToken: req.csrfToken()});
 });
 
 router.post("/register", middleware.usernameToLowerCase, function(req, res){
@@ -172,5 +178,12 @@ router.post("/reset/:token", function(req, res){
     ]);
 });
 
+router.get("/shopping-cart", function(req, res) {
+    if(!req.session.cart){
+        return res.render("products/shopping-cart", {products: null});
+    }
+    var cart = new Cart(req.session.cart);
+    res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice});
+});
 
 module.exports = router;
