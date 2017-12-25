@@ -142,6 +142,26 @@ router.get("/:id", function(req, res){
     });
 });
 
+router.get("/:id/varnish", function(req, res){
+    Product.findById(req.params.id, function(err, foundProduct){
+       if(err){
+           console.log(err);
+       } else {
+           res.render("products/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
+       }
+    });
+});
+
+router.get("/:id/specs", function(req, res){
+    Product.findById(req.params.id, function(err, foundProduct){
+       if(err){
+           console.log(err);
+       } else {
+           res.render("products/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
+       }
+    });
+});
+
 //edit route
 router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
     Product.findById(req.params.id, function(err, foundProduct){

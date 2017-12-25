@@ -11,10 +11,6 @@
 	width: 50%;
 }
 
-h1 {
-	text-align: center;
-}
-
 .crop {
 	height: 400px;
 	width: 300px;
@@ -60,7 +56,7 @@ html {
 h1	{
 	font-weight: 700;
 	font-size: 5em;
-
+	text-align: center;
 }
 
 hr	{
