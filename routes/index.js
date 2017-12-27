@@ -9,6 +9,7 @@ var mongoose = require("mongoose"),
     Cart = require("../models/cart"),
     async = require("async"),
     nodemailer = require("nodemailer"),
+    Order = require("../models/order"),
     csrf = require("csurf"),
     crypto = require("crypto");
 
@@ -184,6 +185,58 @@ router.get("/shopping-cart", function(req, res) {
     }
     var cart = new Cart(req.session.cart);
     res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice});
+});
+
+router.get("/checkout", middleware.isLoggedIn, function(req, res) {
+    if(!req.session.cart) {
+        return res.render("product/shopping-cart");
+    } 
+    var cart = new Cart(req.session.cart);
+    var errMsg = req.flash("error")[0];
+    res.render("products/checkout", {total: cart.totalPrice, csrfToken: req.csrfToken(), errMsg: errMsg, noError: !errMsg});
+});
+
+router.post("/checkout", middleware.isLoggedIn, function(req, res) {
+    if(!req.session.cart) {
+        return res.render("product/shopping-cart");
+    } 
+    
+    var cart = new Cart(req.session.cart);
+    var stripe = require("stripe")(
+      "sk_test_451bUetAuy87LnVAJx4oKyQy"
+    );
+    stripe.customers.create({
+      email: req.body.email,
+      source: req.body.stripeSource
+    }, function(err, customer) {
+      // asynchronously called
+      stripe.charges.create({
+          amount: cart.totalPrice * 100,
+          currency: "usd",
+          customer: customer.id,
+          source: req.body.stripeSource, // obtained with Stripe.js
+          description: "Test Charge"
+        }, function(err, charge) {
+          if(err){
+              req.flash("error", err.message);
+              return res.redirect("/checkout");
+          }
+          var order = new Order({
+              user: req.user,
+              cart: req.cart,
+              address: req.body.address,
+              name: req.body.name,
+              paymentId: charge.id
+          });
+          order.save(function(err, result){
+              req.flash("success", "purchase successful");
+              req.cart = null;
+              res.redirect("/products");
+          })
+          
+        });
+    });
+    
 });
 
 module.exports = router;

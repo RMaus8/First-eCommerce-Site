@@ -20,7 +20,7 @@ var productRoutes = require("./routes/products"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
     
-    // "mongodb://localhost/eriks_website"
+    // "DATABASEURL=mongodb://localhost/eriks_website"
 
 mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;

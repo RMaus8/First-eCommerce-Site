@@ -46,6 +46,7 @@ function checkFileType(file, callback){
     
 //Index Route
 router.get("/", function(req, res){
+    var successMsg = req.flash("success")[0];
     var perPage = 8;
     var pageQuery = parseInt(req.query.page);
     var pageNumber = pageQuery ? pageQuery : 1;
@@ -68,7 +69,9 @@ router.get("/", function(req, res){
                             current: pageNumber,
                             pages: Math.ceil(count / perPage),
                             noMatch: noMatch,
-                            search: req.query.search
+                            search: req.query.search,
+                            successMsg: successMsg,
+                            noMessage: !successMsg
                         });
                     };
                 })
@@ -88,8 +91,9 @@ router.get("/", function(req, res){
                             current: pageNumber,
                             pages: Math.ceil(count / perPage),
                             noMatch: noMatch,
-                            search: false
-                            
+                            search: false,
+                            successMsg: successMsg,
+                            noMessage: !successMsg
                         });
                     };
                 });
@@ -206,10 +210,11 @@ router.get("/add-to-cart/:id", function(req, res) {
         }
         cart.add(product, product.id);
         req.session.cart = cart;
-        console.log(req.session.cart);
         res.redirect("/products")
     });
 });
+
+
 
 router.get("/crafts", function(req, res) {
     res.render("crafts");
