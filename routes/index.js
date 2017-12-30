@@ -184,59 +184,76 @@ router.get("/shopping-cart", function(req, res) {
         return res.render("products/shopping-cart", {products: null});
     }
     var cart = new Cart(req.session.cart);
-    res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice});
+    res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice, checkoutPrice: cart.totalPrice * 100, totalQty: cart.totalQty, csrfToken: req.csrfToken()});
 });
 
-router.get("/checkout", middleware.isLoggedIn, function(req, res) {
+// router.get("/checkout", middleware.isLoggedIn, function(req, res) {
+//     if(!req.session.cart) {
+//         return res.render("product/shopping-cart");
+//     } 
+//     var cart = new Cart(req.session.cart);
+//     var errMsg = req.flash("error")[0];
+//     res.render("products/checkout", {total: cart.totalPrice, csrfToken: req.csrfToken(), errMsg: errMsg, noError: !errMsg});
+// });
+
+router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
     if(!req.session.cart) {
         return res.render("product/shopping-cart");
     } 
-    var cart = new Cart(req.session.cart);
-    var errMsg = req.flash("error")[0];
-    res.render("products/checkout", {total: cart.totalPrice, csrfToken: req.csrfToken(), errMsg: errMsg, noError: !errMsg});
-});
 
-router.post("/checkout", middleware.isLoggedIn, function(req, res) {
-    if(!req.session.cart) {
-        return res.render("product/shopping-cart");
-    } 
-    
     var cart = new Cart(req.session.cart);
     var stripe = require("stripe")(
       "sk_test_451bUetAuy87LnVAJx4oKyQy"
     );
     stripe.customers.create({
-      email: req.body.email,
-      source: req.body.stripeSource
+      email: req.body.stripeEmail,
+      source: req.body.stripeToken
     }, function(err, customer) {
       // asynchronously called
       stripe.charges.create({
           amount: cart.totalPrice * 100,
           currency: "usd",
           customer: customer.id,
-          source: req.body.stripeSource, // obtained with Stripe.js
           description: "Test Charge"
         }, function(err, charge) {
           if(err){
               req.flash("error", err.message);
-              return res.redirect("/checkout");
+              return res.redirect("/shopping-cart");
           }
           var order = new Order({
               user: req.user,
               cart: req.cart,
-              address: req.body.address,
-              name: req.body.name,
+              address: req.body.stripeShippingAddressLine1,
+              city: req.body.stripeShippingAddressCity,
+              state: req.body.stripeShippingAddressState,
+              zip: req.body.stripeShippingAddressZip,
+              name: req.body.stripeShippingName,
               paymentId: charge.id
           });
+          console.log(order);
           order.save(function(err, result){
               req.flash("success", "purchase successful");
               req.cart = null;
               res.redirect("/products");
-          })
+          });
           
         });
     });
     
+});
+
+router.get("/profile", middleware.isLoggedIn, function(req, res){
+    Order.find({user: req.user}, function(err, orders){
+        if(err){
+            return req.flash("error", err);
+        }
+        var cart;
+        orders.forEach(function(order){
+            cart = new Cart(order.cart);
+            order.items = cart.generateArray();
+        });
+        res.render('user/profile', {orders: orders});
+    });
 });
 
 module.exports = router;

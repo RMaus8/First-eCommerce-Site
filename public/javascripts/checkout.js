@@ -1,4 +1,6 @@
 var stripe = Stripe('pk_test_sNKs2EaDESoJPar6GZeCYVdo');
+
+
 var elements = stripe.elements();
 
 var $form = $("#checkout-form");

@@ -7,6 +7,10 @@
 
 }
 
+.alignClose {
+	position: absolute;
+}
+
 #contact {
 	width: 50%;
 }

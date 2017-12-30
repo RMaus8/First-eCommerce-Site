@@ -21,6 +21,7 @@
             <% }) %>
         </ul>
     </div>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 </div>
 <div class="row">
     <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
@@ -28,9 +29,27 @@
     </div>
 </div>
 <hr>
-<div class="row">
-    <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
-        <a href="/checkout" type="button" class="btn btn-success">Checkout</button>
+<div class="container">
+    <div class="row">
+
+        <form action="/shopping-cart" method="POST">
+          <script
+            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="pk_test_sNKs2EaDESoJPar6GZeCYVdo"
+            data-amount="<%= checkoutPrice %>"
+            data-name="Erik's Workshop"
+            data-description="<%= totalQty %> item(s)"
+            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+            data-locale="auto"
+            data-zip-code="true"
+            data-billing-address="true"
+            data-shipping-address="true"
+            >
+          </script>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        </form>
+        
+        
     </div>
 </div>
 <% } else { %>
@@ -41,5 +60,6 @@
 </div>
 <% } %>
 
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
 <% include ../partials/footer %>
