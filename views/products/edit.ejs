@@ -17,6 +17,7 @@
                 <div class="form-group">
                     <input class="form-control" type="text" name="product[description]" value="<%= product.description %>">
                 </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button class="addMargin">Update Product</button>
             </form>
             <!--<form action="/products/<%= product._id %>" method="POST" enctype="multipart/form-data">-->

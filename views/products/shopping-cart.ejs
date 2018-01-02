@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 
-<% if(products){ %>
+<% if(totalQty > 0){ %>
 <div class="row">
     <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
         <ul class="list-group">
@@ -10,18 +10,17 @@
                 <strong><%= product.item.name %></strong>
                 <span class="label label-success">$<%= product.price %></span>
                 <div class="btn-group">
-                    <button class="btn btn-primary btn-xs dropdown-toggle" type="button">Action <span class="caret"></span>
+                    <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">Action <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Reduce by 1</a></li>
-                            <li><a href="#">remove all</a></li>
+                            <li><a href="/products/reduce/<%= product.item._id %>">Reduce by 1</a></li>
+                            <li><a href="/products/remove/<%= product.item._id %>">Remove All</a></li>
                         </ul>
-                    </button>
+                    
                 </div>
             </li>
-            <% }) %>
+            <% }); %>
         </ul>
     </div>
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 </div>
 <div class="row">
     <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
@@ -31,24 +30,26 @@
 <hr>
 <div class="container">
     <div class="row">
-
-        <form action="/shopping-cart" method="POST">
-          <script
-            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="pk_test_sNKs2EaDESoJPar6GZeCYVdo"
-            data-amount="<%= checkoutPrice %>"
-            data-name="Erik's Workshop"
-            data-description="<%= totalQty %> item(s)"
-            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-            data-locale="auto"
-            data-zip-code="true"
-            data-billing-address="true"
-            data-shipping-address="true"
-            >
-          </script>
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        </form>
-        
+        <div class="col-md-offset-5">
+            <% if(totalQty > 0){ %>
+            <form action="/shopping-cart" method="POST">
+              <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_sNKs2EaDESoJPar6GZeCYVdo"
+                data-amount="<%= checkoutPrice %>"
+                data-name="Erik's Workshop"
+                data-description="<%= totalQty %> item(s)"
+                data-image="/uploads/image-1513361338125.png"
+                data-locale="auto"
+                data-zip-code="true"
+                data-billing-address="true"
+                data-shipping-address="true"
+                >
+              </script>
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            </form>
+            <% } %>
+        </div>
         
     </div>
 </div>
@@ -60,6 +61,5 @@
 </div>
 <% } %>
 
-<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
 <% include ../partials/footer %>

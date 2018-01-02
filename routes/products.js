@@ -8,8 +8,6 @@ var mongoose = require("mongoose"),
     Cart = require("../models/cart"),
     csrf = require("csurf"),
     Product = require("../models/product");
-    
-var csrfProtection = csrf();
 
 //create the multer storage space
 const storage = multer.diskStorage({
@@ -71,7 +69,7 @@ router.get("/", function(req, res){
                             noMatch: noMatch,
                             search: req.query.search,
                             successMsg: successMsg,
-                            noMessage: !successMsg
+                            noMessage: !successMsg,
                         });
                     };
                 })
@@ -104,7 +102,9 @@ router.get("/", function(req, res){
 
 //New Route
 router.get("/new", middleware.isLoggedInAdmin, function(req, res) {
+    console.log(req.session);
     res.render("products/new");
+    
 });
 
 //Create Route
@@ -214,10 +214,24 @@ router.get("/add-to-cart/:id", function(req, res) {
     });
 });
 
+router.get("/reduce/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
 
+    cart.reduceByOne(productId);
+    req.session.cart = cart;
+    res.redirect("/shopping-cart");
+});
 
-router.get("/crafts", function(req, res) {
-    res.render("crafts");
+router.get("/remove/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+    cart.removeItem(productId);
+    req.session.cart = cart;
+    
+    res.redirect("/shopping-cart");
+        
 });
 
 function escapeRegex(text) {

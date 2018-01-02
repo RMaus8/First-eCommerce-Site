@@ -75,12 +75,13 @@
     </div>
     <div class="row text-center" style="display: flex; flex-wrap: wrap;">
         <% products.forEach(function(product){ %>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="thumbnail crop">
                     <img id="crop" src="<%= product.image %>">
                     <div class="caption">
                         <h2><%= product.name %></h2>
                         <h3>$<%= product.price %></h3>
+                        
                     </div>
                     <a id="marginBottom" class="btn btn-primary" href="/products/<%= product._id %>">View More</a>
                 </div> 

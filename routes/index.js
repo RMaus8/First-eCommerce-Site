@@ -13,9 +13,6 @@ var mongoose = require("mongoose"),
     csrf = require("csurf"),
     crypto = require("crypto");
 
-var csrfProtection = csrf();
-router.use(csrfProtection);
-
 var mailgun = require("mailgun-js");
 var api_key = process.env.MAILGUN_API_KEY;
 //MAILGUN_API_KEY=key-d10ff657dad15f5af086689c533cb4ed
@@ -38,7 +35,7 @@ router.post("/login", middleware.usernameToLowerCase, passport.authenticate("loc
 });
 
 router.get("/register", function(req, res) {
-    res.render("user/register", {csrfToken: req.csrfToken()});
+    res.render("user/register");
 });
 
 router.post("/register", middleware.usernameToLowerCase, function(req, res){
@@ -184,17 +181,9 @@ router.get("/shopping-cart", function(req, res) {
         return res.render("products/shopping-cart", {products: null});
     }
     var cart = new Cart(req.session.cart);
-    res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice, checkoutPrice: cart.totalPrice * 100, totalQty: cart.totalQty, csrfToken: req.csrfToken()});
+    res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice, checkoutPrice: cart.totalPrice * 100, totalQty: cart.totalQty});
 });
 
-// router.get("/checkout", middleware.isLoggedIn, function(req, res) {
-//     if(!req.session.cart) {
-//         return res.render("product/shopping-cart");
-//     } 
-//     var cart = new Cart(req.session.cart);
-//     var errMsg = req.flash("error")[0];
-//     res.render("products/checkout", {total: cart.totalPrice, csrfToken: req.csrfToken(), errMsg: errMsg, noError: !errMsg});
-// });
 
 router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
     if(!req.session.cart) {
@@ -205,6 +194,24 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
     var stripe = require("stripe")(
       "sk_test_451bUetAuy87LnVAJx4oKyQy"
     );
+    
+    var order = {
+          user: req.user,
+          cart: req.session.cart,
+          address: req.body.stripeShippingAddressLine1,
+          city: req.body.stripeShippingAddressCity,
+          state: req.body.stripeShippingAddressState,
+          zip: req.body.stripeShippingAddressZip,
+          name: req.body.stripeShippingName
+    };
+    Order.create(order, function(err, newOrder){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(newOrder);
+        }
+    })
+    
     stripe.customers.create({
       email: req.body.stripeEmail,
       source: req.body.stripeToken
@@ -219,24 +226,12 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
           if(err){
               req.flash("error", err.message);
               return res.redirect("/shopping-cart");
-          }
-          var order = new Order({
-              user: req.user,
-              cart: req.cart,
-              address: req.body.stripeShippingAddressLine1,
-              city: req.body.stripeShippingAddressCity,
-              state: req.body.stripeShippingAddressState,
-              zip: req.body.stripeShippingAddressZip,
-              name: req.body.stripeShippingName,
-              paymentId: charge.id
-          });
-          console.log(order);
-          order.save(function(err, result){
+          } else {
+              order.paymentId = charge.id;
               req.flash("success", "purchase successful");
-              req.cart = null;
+              req.session.cart = null;
               res.redirect("/products");
-          });
-          
+          }
         });
     });
     
@@ -248,6 +243,7 @@ router.get("/profile", middleware.isLoggedIn, function(req, res){
             return req.flash("error", err);
         }
         var cart;
+        console.log(req.session.cart);
         orders.forEach(function(order){
             cart = new Cart(order.cart);
             order.items = cart.generateArray();

@@ -1,6 +1,7 @@
 var express     = require("express"),
     app         = express(),
     session = require("express-session"),
+    csrf = require("csurf"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     flash = require("connect-flash"),
@@ -14,6 +15,7 @@ var express     = require("express"),
     Product = require("./models/product"),
     User = require("./models/user"),
     seedDB = require("./seeds");
+    
     
 var productRoutes = require("./routes/products"),
     tableRoutes = require("./routes/products/tables"),
@@ -40,6 +42,8 @@ app.use(session({
     cookie: { maxAge: 180 * 60 * 1000 }
 }));
 
+var csrfProtection = csrf();
+app.use(csrfProtection);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,6 +57,7 @@ app.use(function(req, res, next){
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     res.locals.session = req.session;
+    res.locals.csrfToken = req.csrfToken();
     next();
 });
 
