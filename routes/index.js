@@ -243,7 +243,6 @@ router.get("/profile", middleware.isLoggedIn, function(req, res){
             return req.flash("error", err);
         }
         var cart;
-        console.log(req.session.cart);
         orders.forEach(function(order){
             cart = new Cart(order.cart);
             order.items = cart.generateArray();

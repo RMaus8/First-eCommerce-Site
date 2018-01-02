@@ -55,7 +55,7 @@
           <li><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
           <li><a href="/login">Login <i class="fa fa-user"></i></a></li>
           <% } else { %>
-          <li><a>Signed in as <%= currentUser.firstName %></a></li>
+          <li><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
           <li><a href="/logout">Logout</a></li>
           <% } %>
         </ul>

@@ -10,8 +10,8 @@
                     <ul class="list-group">
                         <% order.items.forEach(function(item){ %>
                             <li class="list-group-item">
-                                <span class="badge"><%= item.price %></span>
-                                <%= item.item.name %> | <%= item.qty %> Units
+                                <span class="badge">$<%= item.price %></span>
+                                <div class="thumbnailImage"><img src="<%= item.item.image %>"></div> <%= item.item.name %> | <%= item.qty %> Unit(s)
                             </li>
                         <% }); %>
                     </ul>
