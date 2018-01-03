@@ -9,9 +9,9 @@ var DOMAIN = 'mg.bobbymdesigns.com';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 
-router.get("/about", function(req, res) {
-    res.render("about/index");
-});
+// router.get("/about", function(req, res) {
+//     res.render("about/index");
+// });
 
 router.get("/contact", function(req, res) {
     res.render("contact");

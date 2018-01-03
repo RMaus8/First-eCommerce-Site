@@ -7,20 +7,48 @@
 
 }
 
+
 .alignClose {
 	position: absolute;
 }
 
-.thumbnailImage {
-	height: 5%;
-	width: 5%;
-	float: left;
+.productImg {
+	overflow: auto;
+}
+
+#shopImage {
+	height: auto;
+	max-width: 50%;
+}
+
+#shopDesc {
+	max-width: 90%;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#shopImage img {
+	max-height: 100%;
+	max-width: 100%;
+	display: block;
+    margin: 0 auto;
+}
+
+.hideOverflow {
 	overflow: hidden;
+}
+
+.thumbnailImage {
+	height: auto;
+	width: 50px;
+	float: left;
+
 
 }
 
 .thumbnailImage img {
-	max-height: 50%;
+	max-height: 100%;
 	max-width: 100%;
 	display: block;
     margin: 0 auto;
@@ -61,7 +89,7 @@
 }
 
 body {
-	background-color: #d3e4ff;
+	/*background-color: #d3e4ff;*/
 	background-size: cover;
 	background-position: center;
 	font-family: merriweather;
@@ -75,6 +103,11 @@ html {
 h1	{
 	font-weight: 700;
 	font-size: 5em;
+	text-align: center;
+}
+
+h2	{
+	font-weight: 700;
 	text-align: center;
 }
 

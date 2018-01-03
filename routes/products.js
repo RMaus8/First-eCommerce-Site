@@ -219,7 +219,11 @@ router.get("/reduce/:id", function(req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
 
     cart.reduceByOne(productId);
-    req.session.cart = cart;
+    if (cart.totalQty <= 0) {
+        req.session.cart = null;
+    } else {
+        req.session.cart = cart;
+    };
     res.redirect("/shopping-cart");
 });
 
@@ -228,7 +232,11 @@ router.get("/remove/:id", function(req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
 
     cart.removeItem(productId);
-    req.session.cart = cart;
+    if (cart.totalQty <= 0) {
+        req.session.cart = null;
+    } else {
+        req.session.cart = cart;
+    };
     
     res.redirect("/shopping-cart");
         
