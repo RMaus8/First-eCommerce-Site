@@ -1,77 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Erik's Workshop</title>
-	<link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="stylesheets/landing.css">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-</head>
-<body>
-
-<nav class="navbar navbar-default">
-  <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Erik's Workshop</a>
+<% include ./partials/header %>
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="slideshow">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </div>
+            </div>
+        </div>
+    
+    
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail testBox"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="blahblah">
+                    <h3>What's trending</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail testBox"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail testBox"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail testBox"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="thumbnail testBox"></div>
+            </div>
+        </div>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-      <ul class="nav navbar-nav">
-        <li><a href="/products">Furniture</a></li>
-        <li><a href="/homegoods">Home Goods</a></li>
-        <li><a href="/giftideas">Gift Ideas</a></li>
-        <li><a href="/contact">Contact</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="/shopping-cart">Shopping Cart 
-              <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-              <% if(session.cart){ %>
-              <span class="badge"><%= session.cart.totalQty %></span>
-              <% } %>
-            </a>
-          </li>
-          <% if(!currentUser){ %>
-          <li><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
-          <li><a href="/login">Login <i class="fa fa-user"></i></a></li>
-          <% } else { %>
-          <li><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
-          <li><a href="/logout">Logout</a></li>
-          <% } %>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<div id="content">
-				<h1>Erik's Workshop</h1>
-				<h3>Making High Quality Woodwoork Designs</h3>
-				<hr>
-				<form action="/products" method="GET">
-				    <button class="btn btn-default btn-lg"><i class="fa fa-eye" aria-hidden="true"></i> Take A Look</button>
-				</form>
-			</div>
-		</div>
-	</div>
 </div>
 
 
-<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</body>
-</html>
+
+<% include ./partials/footer %>

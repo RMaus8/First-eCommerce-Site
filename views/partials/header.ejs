@@ -9,10 +9,12 @@
   	<link rel="stylesheet" type="text/css" href="../stylesheets/example2.css">
   	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">-->
+    
     <script
     src="https://code.jquery.com/jquery-3.2.1.min.js"
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
+    
   </head>
   <body>
   
@@ -20,24 +22,27 @@
     <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+          <span class="navbar-toggler-icon"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/">Erik's Workshop</a>
       </div>
-  
+      
       <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        
         <ul class="nav navbar-nav">
-          <li><a href="/products">Furniture</a></li>
-          <li><a href="/crafts">Home Goods</a></li>
-          <li><a href="/giftideas">Gift Ideas</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li class="nav-item"><a href="/products">Furniture</a></li>
+          <li class="nav-item"><a href="/crafts">Home Goods</a></li>
+          <li class="nav-item"><a href="/giftideas">Gift Ideas</a></li>
+          <li class="nav-item"><a href="/contact">Contact</a></li>
         </ul>
+        
         <ul class="nav navbar-nav navbar-right">
-          <li>
+          <li class="nav-item">
             <a href="/shopping-cart">Shopping Cart 
               <i class="fa fa-shopping-cart" aria-hidden="true"></i>
               <% if(session.cart){ %>
@@ -46,17 +51,19 @@
             </a>
           </li>
           <% if(!currentUser){ %>
-          <li><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
-          <li><a href="/login">Login <i class="fa fa-user"></i></a></li>
+          <li class="nav-item"><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
+          <li class="nav-item"><a href="/login">Login <i class="fa fa-user"></i></a></li>
           <% } else { %>
-          <li><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
-          <li><a href="/logout">Logout</a></li>
+          <li class="nav-item"><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
+          <li class="nav-item"><a href="/logout">Logout</a></li>
           <% } %>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
   <script src="https://js.stripe.com/v3/"></script>
+  
+  
 
   <div class="container">
     <% if(error && error.length > 0){ %>
@@ -70,4 +77,6 @@
       </div>
     <% } %>
   </div>
+  
+  
   

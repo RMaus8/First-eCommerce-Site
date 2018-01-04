@@ -20,6 +20,7 @@ var DOMAIN = 'mg.bobbymdesigns.com';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 router.get("/", function(req, res){
+    
     res.render("landing");
 });
 
