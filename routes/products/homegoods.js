@@ -2,24 +2,19 @@ var mongoose = require("mongoose"),
     express = require("express"),
     router = express.Router(),
     multer = require("multer"),
-    middleware = require("../middleware"),
+    middleware = require("../../middleware"),
     path = require("path"),
-    User = require("../models/user"),
-    Cart = require("../models/cart"),
-    csrf = require("csurf"),
-    Product = require("../models/product");
-
-//create the multer storage space
+    User = require("../../models/user"),
+    Cart = require("../../models/cart"),
+    Product = require("../../models/product");
+    
+// create the multer storage space
 const storage = multer.diskStorage({
     destination: "./public/uploads/",
     filename: function(req, file, callback){
         callback(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
     }
 });
-
-router.get("/gifts", function(req, res) {
-    res.send("gift page");
-})
 
 //create the upload var to upload images
 const upload = multer({
@@ -45,8 +40,8 @@ function checkFileType(file, callback){
         callback("Error: Images Only")
     }
 }
-    
-//Index Route
+
+//homegoods index route 
 router.get("/", function(req, res){
     var successMsg = req.flash("success")[0];
     var perPage = 8;
@@ -55,7 +50,7 @@ router.get("/", function(req, res){
     var noMatch = null;
     if(req.query.search){
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        Product.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+        Product.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allhomegoods){
             if(err){
                 console.log(err);
             } else {
@@ -63,24 +58,24 @@ router.get("/", function(req, res){
                     if(err){
                         console.log(err);
                     } else {
-                        if(allProducts.length < 1){
+                        if(allhomegoods.length < 1){
                             noMatch = "No products match that query, please try again.";
                         }
-                        res.render("products/index", {
-                            products: allProducts,
+                        res.render("products/homegoods/index", {
+                            products: allhomegoods,
                             current: pageNumber,
                             pages: Math.ceil(count / perPage),
                             noMatch: noMatch,
                             search: req.query.search,
                             successMsg: successMsg,
-                            noMessage: !successMsg,
+                            noMessage: !successMsg
                         });
                     };
                 })
             }
         });
     } else {
-        Product.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+        Product.find({productType: "homegoods"}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allhomegoods){
             if(err){
                 console.log(err)
             } else {
@@ -88,14 +83,15 @@ router.get("/", function(req, res){
                     if(err){
                         console.log(err);
                     } else {
-                        res.render("products/index", {
-                            products: allProducts,
+                        res.render("products/homegoods/index", {
+                            products: allhomegoods,
                             current: pageNumber,
                             pages: Math.ceil(count / perPage),
                             noMatch: noMatch,
                             search: false,
                             successMsg: successMsg,
                             noMessage: !successMsg
+                            
                         });
                     };
                 });
@@ -104,14 +100,13 @@ router.get("/", function(req, res){
     }
 });
 
-//New Route
+//homegoods new route 
 router.get("/new", middleware.isLoggedInAdmin, function(req, res) {
     console.log(req.session);
-    res.render("products/new");
-    
+    res.render("products/homegoods/new");
 });
 
-//Create Route
+//homegoods create route 
 router.post("/", middleware.isLoggedInAdmin, function(req, res){
     upload(req, res, function(err){
         if(err){
@@ -127,48 +122,48 @@ router.post("/", middleware.isLoggedInAdmin, function(req, res){
         }
         var price = req.body.price;
         var desc = req.body.description;
-        var newProduct = {name: name, image: image, price: price, description: desc};
+        var newProduct = {name: name, image: image, price: price, description: desc, productType: "homegoods"};
         Product.create(newProduct, function(err, newlyCreatedProduct){
             if(err){
                 console.log(err);
             } else {
                 req.flash("success", "Product added!")
-                res.redirect("/products");
+                res.redirect("/products/homegoods");
             }
         });
     });
 });
 
-//show route
+//homegoods show route 
 router.get("/:id", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/homegoods/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 
 //show page varnish options route
 router.get("/:id/varnish", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/homegoods/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 
 //show page specs route
 router.get("/:id/specs", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/homegoods/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 
@@ -178,7 +173,7 @@ router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
         if(err){
             console.log(err);
         } else {
-            res.render("products/edit", {product: foundProduct});
+            res.render("products/homegoods/edit", {product: foundProduct});
         }
     });
 });
@@ -188,9 +183,9 @@ router.put("/:id", middleware.isLoggedInAdmin, function(req, res){
     Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct){
         if(err){
             console.log(err);
-            res.redirect("/products");
+            res.redirect("/products/homegoods/");
         } else {
-            res.redirect("/products/" + req.params.id);
+            res.redirect("/products/homegoods/" + req.params.id);
         }
     });
 });
@@ -201,8 +196,22 @@ router.delete("/:id", middleware.isLoggedInAdmin, function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.redirect("/products");
+            res.redirect("/products/homegoods/");
         }
+    });
+});
+
+router.get("/add-to-cart/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    
+    Product.findById(productId, function (err, product){
+        if(err){
+            return res.redirect("/");
+        }
+        cart.add(product, product.id);
+        req.session.cart = cart;
+        res.redirect("/products/homegoods")
     });
 });
 

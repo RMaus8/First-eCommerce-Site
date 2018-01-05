@@ -18,11 +18,12 @@ var express     = require("express"),
     
     
 var productRoutes = require("./routes/products"),
-    tableRoutes = require("./routes/products/tables"),
+    furnitureRoutes = require("./routes/products/furniture"),
+    homegoodsRoutes = require("./routes/products/homegoods"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
     
-    // "DATABASEURL=mongodb://localhost/eriks_website"
+    // DATABASEURL=mongodb://localhost/eriks_website
 
 mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
@@ -32,7 +33,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-seedDB();
+// seedDB();
 
 app.use(session({
     secret: "Zola and Milo are my special dogs",
@@ -63,7 +64,8 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
-app.use("/products/tables", tableRoutes);
+app.use("/products/homegoods", homegoodsRoutes);
+app.use("/products/furniture", furnitureRoutes);
 app.use("/products", productRoutes);
 app.use("/", soloRoutes);
 

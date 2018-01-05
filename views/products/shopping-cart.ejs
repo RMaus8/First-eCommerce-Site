@@ -2,6 +2,7 @@
 
 <% if(products){ %>
 
+
 <div class="row">
     <div class="container">
         <ul class="list-group">
@@ -27,8 +28,8 @@
                 <div class="btn-group">
                     <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">Remove... <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <li><a href="/products/reduce/<%= product.item._id %>">Remove 1 Unit</a></li>
-                            <li><a href="/products/remove/<%= product.item._id %>">Remove All</a></li>
+                            <li class="dropdown-item"><a href="/reduce/<%= product.item._id %>">Remove 1 Unit</a></li>
+                            <li class="dropdown-item"><a href="/remove/<%= product.item._id %>">Remove All</a></li>
                         </ul>
                     
                 </div>

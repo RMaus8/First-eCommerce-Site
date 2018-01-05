@@ -1,10 +1,10 @@
-<%include ../partials/header %>
+<%include ../../partials/header %>
 
 <div class="container">
     <div class="row">
         <h1>Edit <%= product.name %></h1>
         <div class="padded">
-            <form action="/products/<%= product._id %>?_method=PUT" method="POST">
+            <form action="/products/furniture/<%= product._id %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="product[name]" value="<%= product.name %>">
                 </div>
@@ -32,4 +32,4 @@
 
 
 
-<%include ../partials/footer %>
+<%include ../../partials/footer %>

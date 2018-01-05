@@ -30,7 +30,7 @@ router.get("/login", function(req, res) {
 
 router.post("/login", middleware.usernameToLowerCase, passport.authenticate("local",
     {
-        successRedirect: "/products",
+        successRedirect: "/",
         failureRedirect: "/login"
     }), function(req, res){
 });
@@ -51,7 +51,7 @@ router.post("/register", middleware.usernameToLowerCase, function(req, res){
                 return res.render("user/register");
             }
             passport.authenticate("local")(req, res, function(){
-                res.redirect("/products");
+                res.redirect("/");
             });
         });
     } else {
@@ -63,7 +63,7 @@ router.post("/register", middleware.usernameToLowerCase, function(req, res){
 
 router.get("/logout", function(req, res) {
     req.logout();
-    res.redirect("/products");
+    res.redirect("/");
 });
 
 router.get("/forgot", function(req, res){
@@ -177,6 +177,34 @@ router.post("/reset/:token", function(req, res){
     ]);
 });
 
+router.get("/reduce/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+    cart.reduceByOne(productId);
+    if (cart.totalQty <= 0) {
+        req.session.cart = null;
+    } else {
+        req.session.cart = cart;
+    };
+    res.redirect("/shopping-cart");
+});
+
+router.get("/remove/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+
+    cart.removeItem(productId);
+    if (cart.totalQty <= 0) {
+        req.session.cart = null;
+    } else {
+        req.session.cart = cart;
+    };
+    
+    res.redirect("/shopping-cart");
+        
+});
+
 router.get("/shopping-cart", function(req, res) {
     if(!req.session.cart){
         return res.render("products/shopping-cart", {products: null});
@@ -208,9 +236,7 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
     Order.create(order, function(err, newOrder){
         if(err){
             console.log(err);
-        } else {
-            console.log(newOrder);
-        }
+        } 
     })
     
     stripe.customers.create({
@@ -231,8 +257,27 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
               order.paymentId = charge.id;
               req.flash("success", "purchase successful");
               req.session.cart = null;
-              res.redirect("/products");
-          }
+              console.log(order.cart.items);
+              
+            //   var data = {
+            //     to: "rmausolf06@gmail.com",
+            //     from: 'New Order <orders@bobbymdesigns.com>',
+            //     subject: 'A New Order Has Been Placed',
+            //     text: "Name: " + order.name + "\n" +
+            //     "order ID: " + order._id + "\n" +
+            //     "Address: " + order.address +"\n" +
+            //     "City: " + order.city +"\n" +
+            //     "State: " + order.state + " " + order.zip + "\n" +
+            //     "Products Ordered: " + order.cart.items
+                
+            //     };
+            
+            //     mailgun.messages().send(data, function (error, body) {
+        //     function(err){
+                
+                res.redirect("/");
+            // });
+          };
         });
     });
     
