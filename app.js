@@ -20,6 +20,7 @@ var express     = require("express"),
 var productRoutes = require("./routes/products"),
     furnitureRoutes = require("./routes/products/furniture"),
     homegoodsRoutes = require("./routes/products/homegoods"),
+    giftsRoutes = require("./routes/products/gifts"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
     
@@ -33,7 +34,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-// seedDB();
+seedDB();
 
 app.use(session({
     secret: "Zola and Milo are my special dogs",
@@ -65,6 +66,7 @@ app.use(function(req, res, next){
 
 app.use("/", indexRoutes);
 app.use("/products/homegoods", homegoodsRoutes);
+app.use("/products/gifts", giftsRoutes);
 app.use("/products/furniture", furnitureRoutes);
 app.use("/products", productRoutes);
 app.use("/", soloRoutes);

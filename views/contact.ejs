@@ -1,6 +1,6 @@
 <% include ./partials/header %>
 
-<div class="container">
+<!--<div class="container">-->
     <div class="row">
         <div class="col-md-12">
             <div class="thumbnail registerForm">
@@ -40,13 +40,17 @@
                       <label for="inputAddress2">Questions/Comments</label></label>
                       <textarea class="form-control" name="contactMessage"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Send</button>
+                    <div>
+                      <button type="submit" class="btn btn-primary">Send</button>
+                      <p class="text-center"><em>* required</em></p>
+                    </div>
+                    
                   </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+<!--</div>-->
 
 
 <% include ./partials/footer %>

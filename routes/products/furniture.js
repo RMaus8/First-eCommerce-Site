@@ -79,7 +79,7 @@ router.get("/", function(req, res){
             if(err){
                 console.log(err)
             } else {
-                Product.count({}).exec(function (err, count){
+                Product.count({productType: "furniture"}).exec(function (err, count){
                     if(err){
                         console.log(err);
                     } else {

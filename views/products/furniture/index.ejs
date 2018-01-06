@@ -12,23 +12,22 @@
     </div>
 </div>
 
-<div class="container">
+
     <header class="jumbotron">
-        <!--<div class="container">-->
+        <div class="container">
             <h1>EHeart Design Co</h1>
-            <h4 name="titleName">furniture</h4>
             <% if(currentUser && currentUser.isAdmin){ %>
             <a class="btn btn-primary" href="/products/furniture/new">Add a new product</a>
             <% } %>
             <p>
                 <form class="form-inline" action="/products/furniture" method="GET">
-                    <div class="form-group">
+                    <div class="form-group searchCont">
                         <input id="searchBar" type="text" name="search" placeholder="Search Products" class="form-control">
                         <input type="submit" value="Search" class="btn btn-default">
                     </div>
                 </form>
             </p>
-        <!--</div>-->
+        </div>
     </header>
     <div id="pagebar" class="row text-center">
         <% if (pages && pages > 0) { %>
@@ -93,7 +92,6 @@
         <% }) %>
     </div>
 
-</div>
 
 
 
