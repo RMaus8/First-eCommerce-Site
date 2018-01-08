@@ -3,10 +3,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">Erik's Shop</p>
             <div class="list-group">
                 <a href="/products/gifts/<%= product._id %>"><li class="list-group-item">Product Overview</li></a>
-                <a href="/products/gifts/<%= product._id %>/varnish"><li class="list-group-item">Varnish Options</li>
                 <a href="/products/gifts/<%= product._id %>/specs"><li class="list-group-item active">Product Specifications</li>
             </div>
         </div>
@@ -23,6 +21,7 @@
                     <% if(currentUser && currentUser.isAdmin){ %>
                         <a class="btn btn-xs btn-warning" href="/products/gifts/<%= product._id %>/edit">Edit</a>
                         <form class="deleteform" action="/products/gifts/<%= product._id %>?_method=DELETE" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="btn btn-xs btn-danger">Delete</button>
                         </form>
                     <% } %>

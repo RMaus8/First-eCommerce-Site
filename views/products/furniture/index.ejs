@@ -15,7 +15,7 @@
 
     <header class="jumbotron">
         <div class="container">
-            <h1>EHeart Design Co</h1>
+            <h1>Furniture</h1>
             <% if(currentUser && currentUser.isAdmin){ %>
             <a class="btn btn-primary" href="/products/furniture/new">Add a new product</a>
             <% } %>
@@ -84,7 +84,10 @@
                             <h3>$<%= product.price %></h3>
                             
                         </div>
-                        <a id="marginBottom" class="btn btn-primary" href="/products/furniture/<%= product._id %>">View More</a>
+                        <div id="marginBottom">
+                            <a id="viewBtn" class="btn btn-primary" href="/products/furniture/<%= product._id %>">View More</a>
+                            <a class="btn btn-primary" href="/products/furniture/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>                       
+                        </div>
                     </div> 
                 </div>
             <% } %>

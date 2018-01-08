@@ -31,7 +31,8 @@ router.get("/login", function(req, res) {
 router.post("/login", middleware.usernameToLowerCase, passport.authenticate("local",
     {
         successRedirect: "/",
-        failureRedirect: "/login"
+        failureRedirect: "/login",
+        failureFlash: true
     }), function(req, res){
 });
 
@@ -47,12 +48,13 @@ router.post("/register", middleware.usernameToLowerCase, function(req, res){
     if(req.body.password === req.body.confirmPassword) {
         User.register(newUser, req.body.password, function(err, user){
             if(err){
-                console.log(err);
-                return res.render("user/register");
+                req.flash("error", err.message);
+                res.redirect("/register");
+            }   else {
+                passport.authenticate("local")(req, res, function(){
+                    res.redirect("/");
+                });
             }
-            passport.authenticate("local")(req, res, function(){
-                res.redirect("/");
-            });
         });
     } else {
         req.flash("error", "Passwords do not match!");

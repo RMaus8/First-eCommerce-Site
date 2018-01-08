@@ -6,10 +6,12 @@
 	position: absolute;
 }
 
-.blahblah h3{
+.blahblah h2{
 	text-align: center;
 	padding-top: 13vh;
 	margin-top: 30px;
+	font-family: merriweather;
+	font-weight: 700;
 }
 
 .col-md-12 hr {
@@ -37,7 +39,7 @@
 }
 
 .navbar-brand {
-	font-size: 2em;
+	font-size: 2.5em;
 }
 
 .nav a {
@@ -136,6 +138,10 @@
 	opacity: 1;
 }
 
+.searchCont {
+	margin-left: 22vw;
+}
+
 .StripeElement {
 	margin: 15px;
 	background-color: white;
@@ -222,6 +228,9 @@
     margin: 0 auto;
 }
 
+#viewBtn {
+	margin-right: 20px;
+}
 
 body {
 
