@@ -4,7 +4,7 @@
     <div class="row">
         <h1>Edit <%= product.name %></h1>
         <div class="padded">
-            <form action="/products/furniture/<%= product._id %>?_method=PUT" method="POST">
+            <form id="form" action="/products/furniture/<%= product._id %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="product[name]" value="<%= product.name %>">
                 </div>
@@ -15,11 +15,21 @@
                     <input class="form-control" type="number" name="product[price]" value="<%= product.price %>" min="0.01" step="0.01">
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="product[description]" value="<%= product.description %>">
+                    <input id="editDescription" class="form-control" type="text" name="product[description]" value="<%= product.description %>">
                 </div>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button class="addMargin">Update Product</button>
             </form>
+            
+            <!--<div>-->
+            <!--    <button type="button" id="jBold"><strong>B</strong></button>-->
+            <!--    <button type="button" id="jItalic"><em>I</em></button>-->
+            <!--    <button type="button" id="jUnderline"><u>U</u></button>-->
+            <!--</div>-->
+            <!--<div id='fake_textarea' class="form-control" contenteditable>-->
+            <!--  -->
+            <!--</div>-->
+            
             <!--<form action="/products/<%= product._id %>" method="POST" enctype="multipart/form-data">-->
             <!--    <div class="form-group">-->
             <!--        <input class="form-control-file" type="file" name="image2">-->
