@@ -259,26 +259,30 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
               order.paymentId = charge.id;
               req.flash("success", "purchase successful");
               req.session.cart = null;
-              console.log(order.cart.items);
+              order.items = cart.generateArray();
+              var orderArr = []
+              order.items.forEach(function(item){
+                  orderArr += item.item.name + ", ";
+              });
               
-            //   var data = {
-            //     to: "rmausolf06@gmail.com",
-            //     from: 'New Order <orders@bobbymdesigns.com>',
-            //     subject: 'A New Order Has Been Placed',
-            //     text: "Name: " + order.name + "\n" +
-            //     "order ID: " + order._id + "\n" +
-            //     "Address: " + order.address +"\n" +
-            //     "City: " + order.city +"\n" +
-            //     "State: " + order.state + " " + order.zip + "\n" +
-            //     "Products Ordered: " + order.cart.items
+              var data = {
+                to: "rmausolf06@gmail.com",
+                from: 'New Order <orders@bobbymdesigns.com>',
+                subject: 'A New Order Has Been Placed',
+                text: "Name: " + order.name + "\n" +
+                "order ID: " + order.paymentId + "\n" +
+                "Address: " + order.address +"\n" +
+                "City: " + order.city +"\n" +
+                "State: " + order.state + " " + order.zip + "\n" +
+                "Products Ordered: " + orderArr
                 
-            //     };
+                };
             
-            //     mailgun.messages().send(data, function (error, body) {
-        //     function(err){
+                mailgun.messages().send(data, function (error, body) {
+            // function(err){
                 
                 res.redirect("/");
-            // });
+            });
           };
         });
     });

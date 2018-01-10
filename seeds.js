@@ -1,6 +1,6 @@
 var mongoose = require("mongoose"),
     Product = require("./models/product"),
-    User = require("./models/user");
+    Order = require("./models/order");
     // Comment = require("./models/comment");
     
 var data = [
@@ -85,7 +85,7 @@ var data = [
     
 function seedDB(){
     // remove allcampgrounds
-    // User.remove({}, function(err){});
+    // Order.remove({}, function(err){});
     Product.remove({}, function(err){ //mongoose to remove everything from db
         if(err){
             console.log(err);
