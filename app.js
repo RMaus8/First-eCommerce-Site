@@ -27,7 +27,7 @@ var productRoutes = require("./routes/products"),
     // DATABASEURL=mongodb://localhost/eriks_website
 // process.env.DATABASEURL
 
-mongoose.connect("mongodb://localhost/eriks_website", {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
