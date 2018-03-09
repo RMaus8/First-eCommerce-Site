@@ -1,33 +1,43 @@
-#content {
-	text-align: center;
-	padding-top: 25%;
-	text-shadow: 0px 4px 3px rgba(255,255,255,.4),
-				 0px 8px 13px rgba(255,255,255,.2),
-				 0px 18px 23px rgba(255,255,255,.1);
-
+.box {
+  background: #9b59b6;
+  height: 100px;
+  width: 100px;
+  line-height:100px;
+  text-align: center;
+  color: white;
+  font-size: 17px;
+  border-radius: 20px;
 }
 
-body {
-	background-image: url(https://images.unsplash.com/photo-1484711899564-7a994f941ff9?w=1350&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D);
-	background-size: cover;
-	background-position: center;
-	font-family: merriweather;
-	color: #0C0C07;
+@media (max-width: 420px) {
+  .navbar-brand {
+    width: 70%;
+  }
+}
+/*.animated {*/
+/*  transition-property: background, border-radius; */
+  /* selecting these 2 properties to transition */
+/*  transition-duration: 5s, 1s; */
+  /* timing matches the respective properties above */
+/*  transition-delay: 2s, .5; */
+  /* delays match respective properties above - timings start counting when hover (event) is triggered*/
+/*}*/
+
+/*.box:hover {*/
+/*  background: #e74c3c;*/
+/*  transform-origin: top left;*/
+/*  transform:scale(2);*/
+/*  border-radius: 50px;*/
+/*}*/
+
+.animated {
+	/*transition-property: transform;*/
+	/*transition-duration: 2s;*/
+	/*transition-timing-function: ease-out;*/
+	transition: transform 2s ease-out 1s, background-color .5s linear;
 }
 
-html {
-	height: 100%;
-}
-
-h1	{
-	font-weight: 700;
-	font-size: 5em;
-
-}
-
-hr	{
-	width: 400px;
-	border-top: 1px solid #f8f8f8;
-	border-bottom: 1px solid rgba(0,0,0,0.2);
-	background-color: #0C0C07;
+.box:hover {
+	transform: translateX(300px);
+	background-color: teal;
 }

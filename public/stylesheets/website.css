@@ -38,8 +38,23 @@
 	height: 50vh;
 }
 
-.navbar-brand {
-	font-size: 2.5em;
+@media(max-width: 800px){
+	.navbar-brand {
+		font-size: 2.5em;
+		line-height: 100%;
+		position: relative;
+		margin-top: 0;
+		padding-top: 0;
+	}
+	.navbar-toggle {
+		margin-top: 2.1em;
+	}
+}
+
+@media(min-width: 801px){
+	.navbar-brand {
+		font-size: 2.5em;
+	}
 }
 
 .nav a {
@@ -288,4 +303,11 @@ hr	{
 
 button {
   font-weigth: bold;
+}
+
+
+@media (max-width: 420px) {
+  .navbar-brand {
+    width: 70%;
+  }
 }

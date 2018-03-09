@@ -25,8 +25,8 @@ var productRoutes = require("./routes/products"),
     indexRoutes = require("./routes/index");
     
     // DATABASEURL=mongodb://localhost/eriks_website
-
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
+// process.env.DATABASEURL
+mongoose.connect("mongodb://localhost/eriks_website", {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -71,6 +71,10 @@ app.use("/products/furniture", furnitureRoutes);
 app.use("/products", productRoutes);
 app.use("/", soloRoutes);
 
+
+app.get("/test", function(req, res){
+    res.render("test");
+})
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server started");
