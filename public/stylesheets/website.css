@@ -38,7 +38,7 @@
 	height: 50vh;
 }
 
-@media(max-width: 800px){
+@media(max-width: 420px){
 	.navbar-brand {
 		font-size: 2.5em;
 		line-height: 100%;
@@ -51,7 +51,7 @@
 	}
 }
 
-@media(min-width: 801px){
+@media(min-width: 421px){
 	.navbar-brand {
 		font-size: 2.5em;
 	}
