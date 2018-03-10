@@ -5,6 +5,7 @@ var productSchema = new mongoose.Schema({
     price: Number,
     image: String,
     description: String,
+    timesPurchased: {type: Number, default: 0},
     productType: {type: String, required: true}
 });
 

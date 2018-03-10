@@ -17,27 +17,36 @@
     </div>
     <div class="row">
         <div class="col-sm-4">
-            <div class="thumbnail testBox"></div>
+            <div class="thumbnail trendingBox">
+                <a href="/products/<%=products[0].productType%>/<%=products[0]._id %>"><img src="<%= products[0].image %>"></a>
+            </div>
         </div>
+        
         <div class="col-sm-4">
             <div class="blahblah" id="trending2">
                 <h2><strong>What's trending</strong></h2>
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="thumbnail testBox"></div>
+            <div class="thumbnail trendingBox">
+                <a href="/products/<%=products[1].productType%>/<%=products[1]._id %>"><img src="<%= products[1].image %>"></a>
+            </div>
         </div>
     </div>
     <div class="row">
+        <% for(var i = 2; i < 5; i++){ %>
         <div class="col-sm-4">
-            <div class="thumbnail testBox"></div>
+            <div class="thumbnail trendingBox">
+                <a href="/products/<%=products[i].productType%>/<%=products[i]._id %>"><img src="<%= products[i].image%> "></a>
+            </div>
         </div>
-        <div class="col-sm-4">
-            <div class="thumbnail testBox"></div>
-        </div>
-        <div class="col-sm-4">
-            <div class="thumbnail testBox"></div>
-        </div>
+        <% } %>
+        <!--<div class="col-sm-4">-->
+        <!--    <div class="thumbnail trendingBox"></div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--    <div class="thumbnail trendingBox"></div>-->
+        <!--</div>-->
         <div class="col-md-12">
             <hr>
         </div>

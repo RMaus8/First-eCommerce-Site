@@ -102,7 +102,6 @@ router.get("/", function(req, res){
 
 //gifts new route 
 router.get("/new", middleware.isLoggedInAdmin, function(req, res) {
-    console.log(req.session);
     res.render("products/gifts/new");
 });
 

@@ -56,6 +56,17 @@
 	}
 }
 
+@media(max-height: 820px){
+	.testBox{
+		height: 20vh;
+	}
+}
+@media(min-height: 821px){
+	.testBox{ height: 30vh;
+	width: 100%;
+	}
+}
+
 @media(min-width: 421px){
 	.navbar-brand {
 		font-size: 2.5em;
@@ -192,14 +203,30 @@
   background-color: #fefde5 !important;
 }
 
+.trendingBox {
+/*	border-color: black;*/
+/*	background-color: #84b3ff;		*/
+/*	display: flex;*/
+/*	flex-wrap: wrap;*/
+	margin-top: 30px;
+	border: none;
+}
+
 .testBox {
-	height: 30vh;
-	width: 100%;
 	border-color: black;
 	background-color: #84b3ff;		
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 30px;
+	border: none;
+}
+
+.thumbnail img {
+	max-height: 100%;
+	max-width: 100%;
+	border-radius: 4px;
+	border-color: black;
+
 }
 
 .thumbnailImage {

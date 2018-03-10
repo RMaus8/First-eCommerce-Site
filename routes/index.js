@@ -20,8 +20,21 @@ var DOMAIN = 'mg.bobbymdesigns.com';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 router.get("/", function(req, res){
+    Product.find(function(err, allProducts){
+        var products = [];
+        allProducts.forEach(function(product){
+            products.push(product);
+        });
+        products.sort(function(a,b){
+            return b.timesPurchased - a.timesPurchased;
+        });
+        if(err){
+            console.log(err);
+        } else {
+            res.render("landing", {products: products});
+        }
+    })
     
-    res.render("landing");
 });
 
 router.get("/login", function(req, res) {
@@ -261,9 +274,26 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
               req.session.cart = null;
               order.items = cart.generateArray();
               var orderArr = []
+              var productIds = []
               order.items.forEach(function(item){
                   orderArr += item.item.name + ", ";
+                  productIds.push({product: item.item._id, qty: item.qty});
+                  
               });
+              productIds.forEach(function(productId){
+                  Product.findById(productId.product, function(error, foundProduct){
+                      if(error){
+                          console.log(error);
+                      }
+                      foundProduct.timesPurchased += productId.qty;
+                      foundProduct.save(function(err){
+                          if (err){
+                              console.log(err);
+                          }
+                      });
+                  });
+                      
+                }); 
               
               var data = {
                 to: "rmausolf06@gmail.com",
@@ -280,6 +310,8 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
             
                 mailgun.messages().send(data, function (error, body) {
             // function(err){
+                
+                
                 
                 res.redirect("/");
             });

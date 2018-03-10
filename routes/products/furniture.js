@@ -6,6 +6,7 @@ var mongoose = require("mongoose"),
     path = require("path"),
     User = require("../../models/user"),
     Cart = require("../../models/cart"),
+    csrf = require("csurf"),
     Product = require("../../models/product");
     
 //create the multer storage space
@@ -102,7 +103,6 @@ router.get("/", function(req, res){
 
 //furniture new route 
 router.get("/new", middleware.isLoggedInAdmin, function(req, res) {
-    console.log(req.session);
     res.render("products/furniture/new");
 });
 
@@ -137,33 +137,33 @@ router.post("/", middleware.isLoggedInAdmin, function(req, res){
 //furniture show route 
 router.get("/:id", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/furniture/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/furniture/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 
 //show page varnish options route
 router.get("/:id/varnish", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/furniture/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/furniture/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 
 //show page specs route
 router.get("/:id/specs", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
-       if(err){
-           console.log(err);
-       } else {
-           res.render("products/furniture/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
-       }
+      if(err){
+          console.log(err);
+      } else {
+          res.render("products/furniture/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
+      }
     });
 });
 

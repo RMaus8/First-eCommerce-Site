@@ -4,7 +4,7 @@
     <div class="row">
         <h1>Add a new product!</h1>
         <div class="padded">
-            <form action="/products/gifts" method="POST" enctype="multipart/form-data">
+            <form action="/products/gifts?_csrf=<%=csrfToken%>" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <input class="form-control" type="text" name="name" placeholder="product name">
                 </div>
@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <input class="form-control" type="text" name="description" placeholder="description">
                 </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                
                 <button class="addMargin">Add product</button>
             </form>
         </div>
