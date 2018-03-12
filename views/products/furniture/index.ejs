@@ -76,7 +76,7 @@
     <div class="row text-center" style="display: flex; flex-wrap: wrap;">
         <% products.forEach(function(product){ %>
             <% if(product.productType === "furniture") {%>
-                <div class="col-md-6">
+                <div class="col-md-6 col-xs-12">
                     <div class="thumbnail crop">
                         <img src="<%= product.image %>">
                         <div class="caption">
