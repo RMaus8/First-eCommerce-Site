@@ -23,11 +23,12 @@
 	height: 50vh;
 	width: 100%;
 	overflow: hidden;
+
 }
 
 .crop img{
-	margin-top: 20px;
-	height: 200px;
+	margin-top: 2%;
+	height: 50%;
 	width: auto;
 }
 
