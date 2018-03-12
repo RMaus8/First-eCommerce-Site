@@ -54,7 +54,9 @@
             <hr>
         </div>
     </div>
+    <% if(currentUser && currentUser.isAdmin){ %>
     <a href="/clearance" type="button" class="btn btn-warning">Edit Clearance Items</a>
+    <% } %>
     <div class="row">
         <h1>Clearance Items</h1>
         <div class="col-md-3 col-xs-6">
