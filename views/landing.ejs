@@ -9,27 +9,29 @@
   <li></li>
 </div>
 
-<div class="container-fluid"></div>
+<div class="container-fluid fontStyling"></div>
     <div class="row" id="trending">
-        <div class="col-sm-12">
-            <h2><strong>What's trending</strong></h2>
+        <div class="col-sm-12 trendingDiv">
+            <h1>What's Trending</h2>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
                 <a href="/products/<%=products[0].productType%>/<%=products[0]._id %>"><img src="<%= products[0].image %>"></a>
+                <h2><%=products[0].name %></h2>
             </div>
         </div>
         
         <div class="col-sm-4">
-            <div class="blahblah" id="trending2">
-                <h2><strong>What's trending</strong></h2>
+            <div class="trendingDiv" id="trending2">
+                <h1>What's Trending</h2>
             </div>
         </div>
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
                 <a href="/products/<%=products[1].productType%>/<%=products[1]._id %>"><img src="<%= products[1].image %>"></a>
+                <h2><%=products[1].name %></h2>
             </div>
         </div>
     </div>
@@ -38,6 +40,7 @@
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
                 <a href="/products/<%=products[i].productType%>/<%=products[i]._id %>"><img src="<%= products[i].image%> "></a>
+                <h2><%=products[i].name %></h2>
             </div>
         </div>
         <% } %>
@@ -52,7 +55,7 @@
         </div>
     </div>
     <div class="row">
-        <h3>Clearance Items</h3>
+        <h1>Clearance Items</h1>
         <div class="col-md-3 col-xs-6">
             <div class="thumbnail testBox"></div>
         </div>

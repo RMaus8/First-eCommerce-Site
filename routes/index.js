@@ -276,7 +276,7 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
               var orderArr = []
               var productIds = []
               order.items.forEach(function(item){
-                  orderArr += item.item.name + ", ";
+                  orderArr += item.item.name + "x" + item.qty + ". ";
                   productIds.push({product: item.item._id, qty: item.qty});
                   
               });
