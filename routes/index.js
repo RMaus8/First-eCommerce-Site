@@ -22,8 +22,12 @@ var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 router.get("/", function(req, res){
     Product.find(function(err, allProducts){
         var products = [];
+        var clearanceProducts = [];
         allProducts.forEach(function(product){
             products.push(product);
+            if(product.clearance === true){
+                clearanceProducts.push(product);
+            }
         });
         products.sort(function(a,b){
             return b.timesPurchased - a.timesPurchased;
@@ -31,7 +35,7 @@ router.get("/", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("landing", {products: products});
+            res.render("landing", {products: products, clearanceProducts: clearanceProducts});
         }
     })
     
@@ -345,24 +349,53 @@ router.get("/clearance", middleware.isLoggedInAdmin,function(req, res) {
     })
 })
 
-// app.put('/clearance', function(req, res) {
-//   const doc = {
-//     author: req.body.author,
-//     quote: req.body.quote,
-//     source: req.body.source,
-//     rating: req.body.rating,
-//     updatedAt: Date.now(),
-//   };
-//   Product.find(function(err, allProducts) {
-//       allProducts.forEach(product){
-//           if(product._id = req.body.product._id){
-              
-//           }
-//       }
-//   }) {
-    
-//   });
-// });
+router.put('/clearance', function(req, res) {
+    var cPrice = req.body.clearancePrice;
+    var cBox = req.body.checkbox;
+    var pId = req.body.productID;
+    pId.forEach(function(pid){
+        if(cBox !== undefined && cBox.length > 0){
+            if(cBox.indexOf(pid) == -1){
+                Product.findById(pid, function(err, foundProduct) {
+                    if(err) {
+                        console.log(err)
+                    }
+                    foundProduct.clearance = false;
+                    foundProduct.save(function(err){
+                        if(err){console.log(err);}
+                    })
+                })
+            }
+        } else {
+            Product.findById(pid, function(err, foundProduct) {
+                if(err) {
+                    console.log(err)
+                }
+                foundProduct.clearance = false;
+                foundProduct.save(function(err){
+                    if(err){console.log(err);}
+                })
+            })
+        }
+    })
+    if(cBox !== undefined && cBox.length > 0){
+        cBox.forEach(function(id){
+            Product.findById(id, function(err, foundProduct) {
+                if(err){
+                    console.log(err);
+                }
+                foundProduct.clearance = true;
+                foundProduct.clearancePrice = cPrice[cBox.indexOf(id)]
+                foundProduct.save(function(err){
+                    if(err){
+                        console.log(err);
+                    }
+                })
+            })
+        })
+    }
+    res.redirect('/clearance');
+});
 
 
 module.exports = router;

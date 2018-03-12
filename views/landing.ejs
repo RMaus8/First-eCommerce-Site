@@ -50,6 +50,7 @@
         <!--<div class="col-sm-4">-->
         <!--    <div class="thumbnail trendingBox"></div>-->
         <!--</div>-->
+    
         <div class="col-md-12">
             <hr>
         </div>
@@ -57,22 +58,35 @@
     <% if(currentUser && currentUser.isAdmin){ %>
     <a href="/clearance" type="button" class="btn btn-warning">Edit Clearance Items</a>
     <% } %>
+    <h1>Clearance Items:</h1>
+    <% if(clearanceProducts.length > 0) {%>
     <div class="row">
-        <h1>Clearance Items</h1>
-        <div class="col-md-3 col-xs-6">
-            <div class="thumbnail testBox"></div>
-        </div>
-        <div class="col-md-3 col-xs-6">
-            <div class="thumbnail testBox"></div>
-        </div>
-        <div class="col-md-3 col-xs-6">
-            <div class="thumbnail testBox"></div>
-        </div>
-        <div class="col-md-3 col-xs-6">
-            <div class="thumbnail testBox"></div>
-        </div>
+        
+        <% clearanceProducts.forEach(function(cProd){ %>
+            <div class="col-md-3 col-xs-6">
+                <div class="thumbnail clearanceBox">
+                    <a href="/products/<%=cProd.productType%>/<%=cProd._id %>"><img src="<%= cProd.image %>"></a>
+                    <div class="col-xs-6 col-xs-offset-3">
+                        <h4><s>$<%= cProd.price %></s></h4>
+                        <h3>$<%= cProd.clearancePrice %></h3>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+        
+        <!--<div class="col-md-3 col-xs-6">-->
+        <!--    <div class="thumbnail testBox"></div>-->
+        <!--</div>-->
+        <!--<div class="col-md-3 col-xs-6">-->
+        <!--    <div class="thumbnail testBox"></div>-->
+        <!--</div>-->
+        <!--<div class="col-md-3 col-xs-6">-->
+        <!--    <div class="thumbnail testBox"></div>-->
+        <!--</div>-->
     </div>
-
+    <% } else { %>
+    <h2 id="noClear">No clearance items at this time, please check back in the future!</h2>
+    <% } %>
 </div>
 
 

@@ -230,13 +230,20 @@
 	border: none;
 }
 
-.testBox {
+.clearanceBox {
 	border-color: black;
-	background-color: #84b3ff;		
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 30px;
 	border: none;
+}
+
+.clearanceBox h3 {
+	color: red;
+}
+
+#noClear {
+	font-family: merriweather;
 }
 
 .thumbnail img {

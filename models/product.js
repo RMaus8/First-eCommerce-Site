@@ -6,6 +6,7 @@ var productSchema = new mongoose.Schema({
     image: String,
     description: String,
     clearance: {type: Boolean, default: false},
+    clearancePrice: {type: Number, default: 0},
     timesPurchased: {type: Number, default: 0},
     productType: {type: String, required: true}
 });
