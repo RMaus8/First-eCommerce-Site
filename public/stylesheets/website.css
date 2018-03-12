@@ -37,7 +37,7 @@
 }
 
 .jumbotron {
-	height: 20vh;
+	/*height: 50%;*/
 	background-color: white;
 }
 
@@ -56,6 +56,9 @@
 @media(max-width: 800px){
 	#trending2 {
 		display: none !important;
+	}
+	.searchCont {
+		margin-left: 10%;
 	}
 }
 
@@ -79,6 +82,9 @@
 @media(min-width: 801px){
 	#trending {
 		display: none !important; 
+	}
+	.searchCont {
+		margin-left: 40%;
 	}
 }
 
@@ -178,9 +184,7 @@
 	opacity: 1;
 }
 
-.searchCont {
-	margin-left: 22vw;
-}
+
 
 .StripeElement {
 	margin: 15px;
