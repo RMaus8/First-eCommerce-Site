@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <div class="padded">
+    <div class="col-md-6 col-md-offset-3 col-xs-12">
         <form class="registerForm" action="/login" method="POST">
             <label>Username</label>
             <div class="form-group">
@@ -14,9 +14,9 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div>
                 <button class="btn btn-success">Login</button>
-                <div>
-                    <a class="marginTop" href="/forgot">Forgot Password?</a>
-                    <a class="pull-right" href="/register">Create Account</a>
+                <div class="row">
+                    <a class="marginTop col-md-4 col-xs-12" href="/forgot">Forgot Password?</a>
+                    <a class="marginTop col-md-4 col-md-offset-4 col-xs-12" href="/register">Create Account</a>
                 </div>
             </div>
             

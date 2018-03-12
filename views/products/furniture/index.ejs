@@ -81,10 +81,11 @@
                         <img src="<%= product.image %>">
                         <div class="caption">
                             <h2><%= product.name %></h2>
-                            <h3>$<%= product.price %></h3>
+                            <p class="col-xs-8 col-xs-offset-2"><strong>Description: </strong><%= product.description.substring(0,100) %>...</p>
+                            <h3 class="col-xs-12">$<%= product.price %></h3>
                             
                         </div>
-                        <div id="marginBottom">
+                        <div id="marginBottom" class="col-xs-12">
                             <a id="viewBtn" class="btn btn-primary" href="/products/furniture/<%= product._id %>">View More</a>
                             <a class="btn btn-primary" href="/products/furniture/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>                       
                         </div>

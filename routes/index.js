@@ -335,4 +335,34 @@ router.get("/profile", middleware.isLoggedIn, function(req, res){
     });
 });
 
+//get route for clearance page
+router.get("/clearance", middleware.isLoggedInAdmin,function(req, res) {
+    Product.find(function(err, allProducts){
+        if(err){
+            return req.flash("error", err);
+        }
+        res.render('clearance', {products: allProducts})
+    })
+})
+
+// app.put('/clearance', function(req, res) {
+//   const doc = {
+//     author: req.body.author,
+//     quote: req.body.quote,
+//     source: req.body.source,
+//     rating: req.body.rating,
+//     updatedAt: Date.now(),
+//   };
+//   Product.find(function(err, allProducts) {
+//       allProducts.forEach(product){
+//           if(product._id = req.body.product._id){
+              
+//           }
+//       }
+//   }) {
+    
+//   });
+// });
+
+
 module.exports = router;

@@ -23,7 +23,7 @@
                 <form class="form-inline" action="/products/gifts" method="GET">
                     <div class="form-group searchCont">
                         <input id="searchBar" type="text" name="search" placeholder="Search Products" class="form-control">
-                        <input type="submit" value="Search" class="btn btn-default">
+                        <input type="submit" value="Search" class="btn btn-primary">
                     </div>
                 </form>
             </p>
@@ -81,10 +81,11 @@
                         <img id="crop" src="<%= product.image %>">
                         <div class="caption">
                             <h2><%= product.name %></h2>
-                            <h3>$<%= product.price %></h3>
+                            <p class="col-xs-8 col-xs-offset-2"><strong>Description: </strong><%= product.description.substring(0,100) %>...</p>
+                            <h3 class="col-xs-12">$<%= product.price %></h3>
                             
                         </div>
-                        <div id="marginBottom">
+                        <div id="marginBottom" class="col-xs-12">
                             <a id="viewBtn" class="btn btn-primary" href="/products/gifts/<%= product._id %>">View More</a>
                             <a class="btn btn-primary" href="/products/gifts/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>   
                         </div>

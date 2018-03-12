@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <div class="padded">
+    <div class="col-md-6 col-md-offset-3">
         <form class="registerForm" action="/register" method="POST">
             <label>First Name</label>
             <div class="form-group">
@@ -33,7 +33,7 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div>
                 <button class="btn btn-success">Sign Up!</button>
-                <a class="pull-right" href="/login">Already have an account? Login here!</a>
+                <a class="marginTop pull-right" href="/login">Already have an account? Login here!</a>
             </div>
         </form>
     </div>
