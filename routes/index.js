@@ -384,8 +384,9 @@ router.put('/clearance', function(req, res) {
                 if(err){
                     console.log(err);
                 }
+
                 foundProduct.clearance = true;
-                foundProduct.clearancePrice = cPrice[cBox.indexOf(id)]
+                foundProduct.clearancePrice = cPrice[pId.indexOf(id)];
                 foundProduct.save(function(err){
                     if(err){
                         console.log(err);
@@ -394,7 +395,7 @@ router.put('/clearance', function(req, res) {
             })
         })
     }
-    res.redirect('/clearance');
+    res.redirect('/');
 });
 
 
