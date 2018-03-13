@@ -122,7 +122,9 @@ router.post("/", middleware.isLoggedInAdmin, function(req, res){
         }
         var price = req.body.price;
         var desc = req.body.description;
-        var newProduct = {name: name, image: image, price: price, description: desc, productType: "furniture"};
+        var specs = req.body.specs;
+        var varnish = req.body.varnish;
+        var newProduct = {name: name, image: image, price: price, description: desc, productType: "furniture", specs: specs, varnish: varnish};
         Product.create(newProduct, function(err, newlyCreatedProduct){
             if(err){
                 console.log(err);
@@ -151,7 +153,7 @@ router.get("/:id/varnish", function(req, res){
       if(err){
           console.log(err);
       } else {
-          res.render("products/furniture/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
+          res.render("products/showVarn", {product: foundProduct}); //render template and then pass in product (foundProduct)
       }
     });
 });
@@ -162,7 +164,7 @@ router.get("/:id/specs", function(req, res){
       if(err){
           console.log(err);
       } else {
-          res.render("products/furniture/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
+          res.render("products/showSpec", {product: foundProduct}); //render template and then pass in product (foundProduct)
       }
     });
 });

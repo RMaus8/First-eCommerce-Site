@@ -81,7 +81,12 @@
                         <div class="caption">
                             <h2><%= product.name %></h2>
                             <p class="col-xs-8 col-xs-offset-2"><strong>Description: </strong><%= product.description.substring(0,100) %>...</p>
+                            <% if(product.clearance){ %>
+                            <h4 class="col-xs-12"><s>$<%= product.price %></s></h4>
+                            <h3 class="col-xs-12 clearancePrice">$<%= product.clearancePrice %></h3>
+                            <% } else { %>
                             <h3 class="col-xs-12">$<%= product.price %></h3>
+                            <% } %>
                             
                         </div>
                         <div id="marginBottom" class="col-xs-12">

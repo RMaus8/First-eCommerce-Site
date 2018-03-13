@@ -335,7 +335,7 @@ router.get("/profile", middleware.isLoggedIn, function(req, res){
             cart = new Cart(order.cart);
             order.items = cart.generateArray();
         });
-        res.render('user/profile', {orders: orders});
+        res.render('user/profile', {orders: orders, currentUser: req.user});
     });
 });
 
