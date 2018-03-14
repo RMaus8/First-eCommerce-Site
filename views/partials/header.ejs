@@ -24,51 +24,61 @@
       <div class="col-xs-10 col-xs-offset-1">
         <!-- Brand and toggle get grouped for better mobile display -->
         
-          
-          <a id="logoText" class="navbar-brand noMargin" href="/">
-            <img src="/uploads/Logo.png" id="navLogo">Heart <span id="logoSpan">Design Co.</span>
-          </a>
-        
-        
-        <div>
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
-              <span class="navbar-toggler-icon"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
+        <div class="navStuff">
+          <div>
+            <a href="/">
+              <img src="/uploads/Logo.png" id="navLogo">
+            </a>
           </div>
-        </div>
+          
+          <div>
+            <a id="logoText" class="navbar-brand noMargin" href="/">Heart <span id="logoSpan">Design Co.</span></a>
+          </div>
         
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-          
-          <ul class="nav navbar-nav">
-            <li class="nav-item"><a href="/products/furniture">Furniture</a></li>
-            <li class="nav-item"><a href="/products/homegoods">Home Goods</a></li>
-            <li class="nav-item"><a href="/products/gifts">Gift Ideas</a></li>
-            <li class="nav-item"><a href="/contact">Contact</a></li>
-          </ul>
-          
-          <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item">
-              <a href="/shopping-cart">Shopping Cart 
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                <% if(session.cart){ %>
-                <span class="badge"><%= session.cart.totalQty %></span>
+          <div id="flexMenu">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>
+          </div>
+        </div>  
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            
+            
+              <ul class="nav navbar-nav">
+                <li class="nav-item"><a href="/products/furniture">Furniture</a></li>
+                <li class="nav-item"><a href="/products/homegoods">Home Goods</a></li>
+                <li class="nav-item"><a href="/products/gifts">Gift Ideas</a></li>
+                <li class="nav-item"><a href="/contact">Contact</a></li>
+              </ul>
+              
+              <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                  <a href="/shopping-cart">Cart 
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    <% if(session.cart){ %>
+                    <span class="badge"><%= session.cart.totalQty %></span>
+                    <% } %>
+                  </a>
+                </li>
+                <% if(!currentUser){ %>
+                <li class="nav-item"><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
+                <li class="nav-item"><a href="/login">Login <i class="fa fa-user"></i></a></li>
+                <% } else { %>
+                <li class="nav-item"><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
                 <% } %>
-              </a>
-            </li>
-            <% if(!currentUser){ %>
-            <li class="nav-item"><a href="/register">Sign up <i class="fa fa-user-plus"></i></a></li>
-            <li class="nav-item"><a href="/login">Login <i class="fa fa-user"></i></a></li>
-            <% } else { %>
-            <li class="nav-item"><a href="/profile">Signed in as <%= currentUser.firstName %></a></li>
-            <li class="nav-item"><a href="/logout">Logout</a></li>
-            <% } %>
-          </ul>
-        </div><!-- /.navbar-collapse -->
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          
+        
+          
+          
       </div>
     </div>
   </nav>
