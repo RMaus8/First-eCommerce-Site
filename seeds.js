@@ -92,7 +92,7 @@ var data = [
     
 function seedDB(){
     // remove allcampgrounds
-    // Order.remove({}, function(err){});
+    Order.remove({}, function(err){});
     Product.remove({}, function(err){ //mongoose to remove everything from db
         if(err){
             console.log(err);

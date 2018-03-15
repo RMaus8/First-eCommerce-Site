@@ -12,7 +12,11 @@
                     <div class="row">
                         <div id="shopImage" class="thumbnail col-sm-6 colCell">
                             <img src="<%= product.item.image %>">
+                            <% if(product.clearance === true) { %>
+                            <span class="label label-success">Cost: $<%= product.clearancePrice %></span>
+                            <% } else { %>
                             <span class="label label-success">Cost: $<%= product.price %></span>
+                            <% } %>
                         </div>
                         <div class="col-sm-6">
                             <strong>Description:</strong>

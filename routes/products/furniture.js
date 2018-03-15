@@ -142,7 +142,7 @@ router.get("/:id", function(req, res){
       if(err){
           console.log(err);
       } else {
-          res.render("products/furniture/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
+          res.render("products/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
       }
     });
 });
@@ -175,7 +175,7 @@ router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
         if(err){
             console.log(err);
         } else {
-            res.render("products/furniture/edit", {product: foundProduct});
+            res.render("products/edit", {product: foundProduct});
         }
     });
 });
