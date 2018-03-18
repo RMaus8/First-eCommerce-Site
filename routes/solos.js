@@ -44,4 +44,8 @@ router.post("/contact", function(req, res){
     });
 });
 
+router.get("/events", function(req, res){
+    res.render("events")
+})
+
 module.exports = router;

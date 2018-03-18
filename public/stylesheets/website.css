@@ -89,6 +89,7 @@
 	.navStuff{
 		display: flex;
 		flex-wrap: nowrap;
+		justify-content: space-between;
 	}
 	.nav a {
 		font-size: 1.3vw;
@@ -222,6 +223,10 @@
 
 .marginAround {
 	margin: 10px 10px;
+}
+
+.marginRight {
+	margin-right: 30px;
 }
 
 .needSpace {

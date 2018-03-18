@@ -29,6 +29,27 @@
             </p>
         </div>
     </header>
+    
+    <!--<form id="form"> -->
+    <!--  <p>Please select your preferred contact method:</p>-->
+    <!--  <div>-->
+    <!--    <input type="radio" id="contactChoice1"-->
+    <!--           name="sortBy" value="none">-->
+    <!--    <label for="contactChoice1">None</label>-->
+    <!--    <input type="radio" id="contactChoice2"-->
+    <!--           name="sortBy" value="price">-->
+    <!--    <label for="contactChoice2">Price</label>-->
+    <!--    <input type="radio" id="contactChoice3"-->
+    <!--           name="sortBy" value="mostBought">-->
+    <!--    <label for="contactChoice3">Most Bought</label>-->
+    <!--  </div>-->
+    <!--  <div>-->
+    <!--    <button type="submit">Submit</button>-->
+    <!--  </div>-->
+    <!--</form>-->
+    <!--<pre id="log">-->
+    <!--</pre>-->
+    
     <div id="pagebar" class="row text-center">
         <% if (pages && pages > 0) { %>
         <ul class="pagination text-center">
@@ -73,10 +94,17 @@
         </ul>
         <% } %>
     </div>
+    
+    <!-- possibly use for sort/filter -->
+
+    <script>
+      var prods = <%- JSON.stringify(products) %> 
+    </script>
+    
     <div class="row text-center" style="display: flex; flex-wrap: wrap;">
         <% products.forEach(function(product){ %>
             <% if(product.productType === "furniture") {%>
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-6 col-xs-12 product">
                     <div class="thumbnail crop">
                         <img src="<%= product.image %>">
                         <div class="caption">
