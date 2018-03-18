@@ -226,7 +226,11 @@
 }
 
 .marginRight {
-	margin-right: 30px;
+	margin-right: 5vw;
+}
+
+.marginLeft {
+	margin-left: 5vw;
 }
 
 .needSpace {
