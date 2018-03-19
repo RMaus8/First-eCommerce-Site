@@ -1,8 +1,9 @@
 var mongoose = require("mongoose"),
     express = require("express"),
+    Event = require("../models/event"),
     router = express.Router(),
     mailgun = require("mailgun-js"),
-    middlesware = require("../middleware");
+    middleware = require("../middleware");
 
 var api_key = process.env.MAILGUN_API_KEY;
 var DOMAIN = 'mg.bobbymdesigns.com';
@@ -45,7 +46,53 @@ router.post("/contact", function(req, res){
 });
 
 router.get("/events", function(req, res){
-    res.render("events")
+    Event.find(function(err, allEvents){
+        var events = []
+        var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        allEvents.forEach(function(event){
+            events.push(event);
+        })
+        events.sort(function(a, b){
+            return a.date - b.date;
+        })
+        if(err){
+            console.log(err);
+        } else {
+            res.render("events", {events: events, month: month, day: weekday});
+        }
+        
+    })
 })
+
+router.get("/new_event", function(req, res) {
+    res.render("newEvent");
+})
+
+router.post("/new_event", function(req, res){
+    var date = req.body.date;
+    var time = req.body.time;
+    var name = req.body.name;
+    var location = req.body.location;
+    var newEvent = {date: date, time: time, name: name, location: location}
+    Event.create(newEvent, function(err, newlyCreatedEvent){
+        if(err){
+            req.flash("error", err);
+        } else {
+            req.flash("success", "new event created");
+            res.redirect("/events");
+        }
+    })
+})
+
+router.delete("/new_event", middleware.isLoggedInAdmin, function(req, res){
+    Event.findByIdAndRemove(req.body.id, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            res.redirect("/events");
+        }
+    });
+});
 
 module.exports = router;

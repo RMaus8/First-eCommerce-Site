@@ -1,8 +1,22 @@
 <% include ./partials/header %>
 
 <h1>Upcoming Events</h1>
+<% if(currentUser && currentUser.isAdmin) { %>
+    <a class="btn btn-primary" href="/new_event">Add a new event</a>
+<% } %>
 <div class="container">
-  <h3><strong>Wed. May 23rd - </strong>EDM Rave Festival</h3>
+    <% events.forEach(function(event){ %> 
+    <div class="border">
+        <h3><%= day[event.date.getDay()] %> @ <%= event.time %>, <%= month[event.date.getMonth()] %> <%= event.date.getDate() %> <%= event.date.getFullYear() %> - <%= event.name %> - <%= event.location %></h3>
+            <% if(currentUser && currentUser.isAdmin){ %>
+                <form class="deleteform " action="/new_event?_method=DELETE" method="POST">
+                    <input type="hidden" name="id" value="<%= event._id %>">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn btn-xs btn-danger marginTop">Delete</button>
+                </form>
+            <% } %>
+    </div>
+    <% }) %>
 </div>
 
 <% include ./partials/footer %>
