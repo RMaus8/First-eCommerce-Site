@@ -62,6 +62,7 @@ router.get("/", function(req, res){
                         if(allFurniture.length < 1){
                             noMatch = "No products match that query, please try again.";
                         }
+                        
                         res.render("products/furniture/index", {
                             products: allFurniture,
                             current: pageNumber,
@@ -84,6 +85,7 @@ router.get("/", function(req, res){
                     if(err){
                         console.log(err);
                     } else {
+                        console.log(req.body.sortBy)
                         res.render("products/furniture/index", {
                             products: allFurniture,
                             current: pageNumber,
