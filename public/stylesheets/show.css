@@ -20,7 +20,7 @@
     max-width: 80%;
 }
 
-i {
+#arrowContainer i {
     border: solid gray;
     border-width: 0 3px 3px 0;
     border-radius: 3px;
