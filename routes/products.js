@@ -7,7 +7,9 @@ var mongoose = require("mongoose"),
     User = require("../models/user"),
     Cart = require("../models/cart"),
     csrf = require("csurf"),
-    Product = require("../models/product");
+    Product = require("../models/product"),
+    utility = require("../shared/utility"),
+    fs = require("fs");
 
 //create the multer storage space
 const storage = multer.diskStorage({
@@ -17,10 +19,6 @@ const storage = multer.diskStorage({
     }
 });
 
-router.get("/gifts", function(req, res) {
-    res.send("gift page");
-})
-
 //create the upload var to upload images
 const upload = multer({
     storage: storage, //for the storage: use our storage var
@@ -28,7 +26,7 @@ const upload = multer({
     fileFilter: function(req, file, callback){
         checkFileType(file, callback) //call function and then define it below
     }
-}).single("image");
+}).array("image", 3);
 
 //function to check for filetypes
 function checkFileType(file, callback){
@@ -47,7 +45,7 @@ function checkFileType(file, callback){
 }
     
 //Index Route
-router.get("/", function(req, res){
+router.get("/:prodType/", function(req, res){
     var successMsg = req.flash("success")[0];
     var perPage = 8;
     var pageQuery = parseInt(req.query.page);
@@ -55,7 +53,7 @@ router.get("/", function(req, res){
     var noMatch = null;
     if(req.query.search){
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        Product.find({name: regex}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+        Product.find({name: regex, productType: req.params.prodType}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
             if(err){
                 console.log(err);
             } else {
@@ -74,13 +72,14 @@ router.get("/", function(req, res){
                             search: req.query.search,
                             successMsg: successMsg,
                             noMessage: !successMsg,
+                            productType: req.params.prodType
                         });
                     };
                 })
             }
         });
     } else {
-        Product.find({}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
+        Product.find({productType: req.params.prodType}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
             if(err){
                 console.log(err)
             } else {
@@ -95,7 +94,8 @@ router.get("/", function(req, res){
                             noMatch: noMatch,
                             search: false,
                             successMsg: successMsg,
-                            noMessage: !successMsg
+                            noMessage: !successMsg,
+                            productType: req.params.prodType
                         });
                     };
                 });
@@ -105,53 +105,58 @@ router.get("/", function(req, res){
 });
 
 //New Route
-router.get("/new", middleware.isLoggedInAdmin, function(req, res) {
-    console.log(req.session);
-    res.render("products/new");
-    
+router.get("/:prodType/new", middleware.isLoggedInAdmin, function(req, res) {
+    res.render("products/new", {prodType: req.params.prodType});
 });
 
 //Create Route
-router.post("/", middleware.isLoggedInAdmin, function(req, res){
+router.post("/:prodType/", middleware.isLoggedInAdmin, function(req, res){
     upload(req, res, function(err){
-        if(err){
-        console.log(err);
-        return res.send("error uploading file");
+        if (err) {
+            console.log(err);
+            return res.send("error uploading file");
         }
-        var name = req.body.name;
-        if(typeof req.file !== "undefined"){
-            var image = "/uploads/" + req.file.filename;
+        const name = req.body.name;
+        let image = []
+        if(typeof req.files !== "undefined"){
+            req.files.forEach(file => {
+                image.push('/uploads/' + file.filename)
+            })
         } else {
             // res.render("products/new")
-            var image = "uploads/no-image.png"
+            image = "uploads/no-image.png"
         }
-        var price = req.body.price;
-        var desc = req.body.description;
-        var newProduct = {name: name, image: image, price: price, description: desc};
+        const price = req.body.price;
+        const productType = req.params.prodType
+        const desc = req.body.description;
+        const specs = req.body.specs
+        const varnish = req.body.varnish
+        console.log(image)
+        const newProduct = {name: name, image: image, price: price, description: desc, productType: productType, specs: specs, varnish: varnish};
         Product.create(newProduct, function(err, newlyCreatedProduct){
             if(err){
                 console.log(err);
             } else {
                 req.flash("success", "Product added!")
-                res.redirect("/products");
+                res.redirect("/products/" + req.params.prodType);
             }
         });
     });
 });
 
 //show route
-router.get("/:id", function(req, res){
+router.get("/:prodType/:id", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
        if(err){
            console.log(err);
        } else {
-           res.render("products/show", {product: foundProduct}); //render template and then pass in product (foundProduct)
+            res.render("products/show", {product: foundProduct, image:foundProduct.image, prodType: req.params.prodType});
        }
-    });
+    })
 });
 
 //show page varnish options route
-router.get("/:id/varnish", function(req, res){
+router.get("/:prodType/:id/varnish", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
        if(err){
            console.log(err);
@@ -162,7 +167,7 @@ router.get("/:id/varnish", function(req, res){
 });
 
 //show page specs route
-router.get("/:id/specs", function(req, res){
+router.get("/:prodType/:id/specs", function(req, res){
     Product.findById(req.params.id, function(err, foundProduct){
        if(err){
            console.log(err);
@@ -173,7 +178,7 @@ router.get("/:id/specs", function(req, res){
 });
 
 //edit route
-router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
+router.get("/:prodType/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
     Product.findById(req.params.id, function(err, foundProduct){
         if(err){
             console.log(err);
@@ -184,25 +189,49 @@ router.get("/:id/edit", middleware.isLoggedInAdmin, function(req, res) {
 });
 
 //update route
-router.put("/:id", middleware.isLoggedInAdmin, function(req, res){
+router.put("/:prodType/:id", middleware.isLoggedInAdmin, function(req, res){
     Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct){
         if(err){
             console.log(err);
-            res.redirect("/products");
+            res.redirect("/products/" + req.params.prodType);
         } else {
-            res.redirect("/products/" + req.params.id);
+            res.redirect("/products/" + req.params.id + "/" + req.params.id);
         }
     });
 });
 
 //delete route
-router.delete("/:id", middleware.isLoggedInAdmin, function(req, res){
-    Product.findByIdAndRemove(req.params.id, function(err){
+router.delete("/:prodType/:id", middleware.isLoggedInAdmin, function(req, res){
+    Product.findByIdAndRemove(req.params.id, function(err, product){
+        product.image.forEach(image => {
+            fs.unlink('./public' + image, (error) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log('delete image')
+                }
+            })
+        })
+        
         if(err){
             console.log(err);
         } else {
-            res.redirect("/products");
+            res.redirect("/products/" + req.params.prodType);
         }
+    });
+});
+
+router.get("/:prodType/add-to-cart/:id", function(req, res) {
+    var productId = req.params.id;
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    
+    Product.findById(productId, function (err, product){
+        if(err){
+            return res.redirect("/");
+        }
+        cart.add(product, product.id);
+        req.session.cart = cart;
+        res.redirect("/products/" + req.params.prodType)
     });
 });
 

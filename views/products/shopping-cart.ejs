@@ -11,7 +11,7 @@
                 <div class="container">
                     <div class="row">
                         <div id="shopImage" class="thumbnail col-sm-6 colCell">
-                            <img src="<%= product.item.image %>">
+                            <img src="<%= product.item.image[0] %>">
                             <% if(product.clearance === true) { %>
                             <span class="label label-success">Cost: $<%= product.clearancePrice %></span>
                             <% } else { %>

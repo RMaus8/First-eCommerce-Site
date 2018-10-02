@@ -14,7 +14,8 @@ var express     = require("express"),
     path = require("path"),
     Product = require("./models/product"),
     User = require("./models/user"),
-    seedDB = require("./seeds");
+    seedDB = require("./seeds"),
+    keys = require("./keys")
     
     
 var productRoutes = require("./routes/products"),
@@ -27,7 +28,12 @@ var productRoutes = require("./routes/products"),
     // DATABASEURL=mongodb://localhost/eriks_website
 // process.env.DATABASEURL
 
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
+let dbUrl = process.env.DATABASEURL
+if (dbUrl === undefined) {
+    dbUrl = keys.DATABASEURL
+}
+
+mongoose.connect(dbUrl, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -66,16 +72,11 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
-app.use("/products/homegoods", homegoodsRoutes);
-app.use("/products/gifts", giftsRoutes);
-app.use("/products/furniture", furnitureRoutes);
+// app.use("/products/homegoods", productRoutes);
+// app.use("/products/gifts", productRoutes);
+// app.use("/products/furniture", furnitureRoutes);
 app.use("/products", productRoutes);
 app.use("/", soloRoutes);
-
-
-app.get("/test", function(req, res){
-    res.render("test");
-})
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server started");

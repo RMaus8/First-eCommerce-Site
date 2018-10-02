@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
-                <a href="/products/<%=products[0].productType%>/<%=products[0]._id %>"><img src="<%= products[0].image %>"></a>
+                <a href="/products/<%=products[0].productType%>/<%=products[0]._id %>"><img src="<%= products[0].image[0] %>"></a>
                 <h2><%=products[0].name %></h2>
             </div>
         </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
-                <a href="/products/<%=products[1].productType%>/<%=products[1]._id %>"><img src="<%= products[1].image %>"></a>
+                <a href="/products/<%=products[1].productType%>/<%=products[1]._id %>"><img src="<%= products[1].image[0] %>"></a>
                 <h2><%=products[1].name %></h2>
             </div>
         </div>
@@ -39,7 +39,7 @@
         <% for(var i = 2; i < 5; i++){ %>
         <div class="col-sm-4">
             <div class="thumbnail trendingBox">
-                <a href="/products/<%=products[i].productType%>/<%=products[i]._id %>"><img src="<%= products[i].image%> "></a>
+                <a href="/products/<%=products[i].productType%>/<%=products[i]._id %>"><img src="<%= products[i].image[0]%> "></a>
                 <h2><%=products[i].name %></h2>
             </div>
         </div>
@@ -65,7 +65,7 @@
         <% clearanceProducts.forEach(function(cProd){ %>
             <div class="col-md-3 col-xs-6">
                 <div class="thumbnail clearanceBox">
-                    <a href="/products/<%=cProd.productType%>/<%=cProd._id %>"><img src="<%= cProd.image %>"></a>
+                    <a href="/products/<%=cProd.productType%>/<%=cProd._id %>"><img src="<%= cProd.image[0] %>"></a>
                     <div class="col-xs-6 col-xs-offset-3">
                         <h4><s>$<%= cProd.price %></s></h4>
                         <h3 class="clearancePrice">$<%= cProd.clearancePrice %></h3>

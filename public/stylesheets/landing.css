@@ -14,21 +14,7 @@
     width: 70%;
   }
 }
-/*.animated {*/
-/*  transition-property: background, border-radius; */
-  /* selecting these 2 properties to transition */
-/*  transition-duration: 5s, 1s; */
-  /* timing matches the respective properties above */
-/*  transition-delay: 2s, .5; */
-  /* delays match respective properties above - timings start counting when hover (event) is triggered*/
-/*}*/
 
-/*.box:hover {*/
-/*  background: #e74c3c;*/
-/*  transform-origin: top left;*/
-/*  transform:scale(2);*/
-/*  border-radius: 50px;*/
-/*}*/
 
 .animated {
 	/*transition-property: transform;*/
@@ -40,4 +26,51 @@
 .box:hover {
 	transform: translateX(300px);
 	background-color: teal;
+}
+
+.clearanceBox {
+	border-color: black;
+	display: flex;
+	flex-wrap: wrap;
+	/*margin-top: 30px;*/
+	border: none;
+}
+
+.clearancePrice {
+	color: red;
+}
+
+.clearanceBox img {
+	width: 100%;
+	height: 100%;
+}
+
+.trendingBox {
+	/*border-color: black;*/
+/*	background-color: #84b3ff;		*/
+/*	display: flex;*/
+/*	flex-wrap: wrap;*/
+	margin-top: 30px;
+	border: none;
+}
+
+.trendingDiv h1{
+	text-align: center;
+	padding-top: 13vh;
+	margin-top: 30px;
+	font-weight: 400;
+	font-family: 'Great Vibes', cursive;
+	
+}
+
+@media(max-width: 800px){
+	#trending2 {
+		display: none !important;
+	}
+}
+
+@media(min-width: 801px){
+	#trending {
+		display: none !important; 
+	}
 }

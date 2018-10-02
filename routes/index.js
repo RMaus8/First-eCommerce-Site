@@ -11,13 +11,19 @@ var mongoose = require("mongoose"),
     nodemailer = require("nodemailer"),
     Order = require("../models/order"),
     csrf = require("csurf"),
+    keys = require("../keys"),
     crypto = require("crypto");
 
 var mailgun = require("mailgun-js");
-var api_key = process.env.MAILGUN_API_KEY;
+// var api_key = process.env.MAILGUN_API_KEY;
+// if(api_key === undefined) {
+//     api_key = keys.MAILGUN_API_KEY
+// }
 //MAILGUN_API_KEY=key-d10ff657dad15f5af086689c533cb4ed
+
+// keys()
 var DOMAIN = 'mg.bobbymdesigns.com';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+var mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN});
 
 router.get("/", function(req, res){
     Product.find(function(err, allProducts){

@@ -4,16 +4,16 @@
     <div class="row">
         <div class="col-md-3">
             <div class="list-group">
-                <a href="/products/furniture/<%= product._id %>"><li class="list-group-item">Product Overview</li></a>
-                <a href="/products/furniture/<%= product._id %>/varnish"><li class="list-group-item active">Varnish Options</li>
-                <a href="/products/furniture/<%= product._id %>/specs"><li class="list-group-item">Product Specifications</li>
+                <a href="/products/<%= product.productType %>/<%= product._id %>"><li class="list-group-item">Product Overview</li></a>
+                <a href="/products/<%= product.productType %>/<%= product._id %>/varnish"><li class="list-group-item active">Varnish Options</li>
+                <a href="/products/<%= product.productType %>/<%= product._id %>/specs"><li class="list-group-item">Product Specifications</li>
             </div>
         </div>
         <div class="col-md-9">
             <div class="thumbnail">
-                <img class="img-responsive" src="<%= product.image %>">
+                <img class="img-responsive" src="<%= product.image[0] %>">
                 <div class="marginAround">
-                    <a class="btn btn-primary marginTop" href="/products/furniture/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>
+                    <a class="btn btn-primary marginTop" href="/products/<%= product.productType %>/add-to-cart/<%= product.id %>" role="button">Add to Cart</a>
                     <div class="caption-full">
                         <div class="needSpace">
                             <% if(product.clearance){ %>
@@ -26,8 +26,8 @@
                         <hr>
                         <p class="marginAround"><strong>Varnish Choices include: </strong><%= product.varnish %></p>
                         <% if(currentUser && currentUser.isAdmin){ %>
-                            <a class="btn btn-xs btn-warning" href="/products/furniture/<%= product._id %>/edit">Edit</a>
-                            <form class="deleteform" action="/products/furniture/<%= product._id %>?_method=DELETE" method="POST">
+                            <a class="btn btn-xs btn-warning" href="/products/<%= product.productType %>/<%= product._id %>/edit">Edit</a>
+                            <form class="deleteform" action="/products/<%= product.productType %>/<%= product._id %>?_method=DELETE" method="POST">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button class="btn btn-xs btn-danger">Delete</button>
                             </form>

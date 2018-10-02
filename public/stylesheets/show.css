@@ -1,0 +1,43 @@
+#arrowContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#imageStart {
+    display: inline-block;
+    max-width: 80%;
+}
+
+#imageSecond {
+    display: none;
+    max-width: 80%;
+}
+
+#imageFinish {
+    display: none;
+    max-width: 80%;
+}
+
+i {
+    border: solid gray;
+    border-width: 0 3px 3px 0;
+    border-radius: 3px;
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+    padding: 3px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
