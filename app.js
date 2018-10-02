@@ -33,7 +33,7 @@ if (dbUrl === undefined) {
     dbUrl = keys.DATABASEURL
 }
 
-mongoose.connect(dbUrl, {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
