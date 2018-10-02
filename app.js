@@ -14,8 +14,7 @@ var express     = require("express"),
     path = require("path"),
     Product = require("./models/product"),
     User = require("./models/user"),
-    seedDB = require("./seeds"),
-    keys = require("./keys")
+    seedDB = require("./seeds")
     
     
 var productRoutes = require("./routes/products"),

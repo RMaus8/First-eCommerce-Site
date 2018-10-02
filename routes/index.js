@@ -11,7 +11,6 @@ var mongoose = require("mongoose"),
     nodemailer = require("nodemailer"),
     Order = require("../models/order"),
     csrf = require("csurf"),
-    keys = require("../keys"),
     crypto = require("crypto");
 
 var mailgun = require("mailgun-js");
