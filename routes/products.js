@@ -131,7 +131,6 @@ router.post("/:prodType/", middleware.isLoggedInAdmin, function(req, res){
         const desc = req.body.description;
         const specs = req.body.specs
         const varnish = req.body.varnish
-        console.log(image)
         const newProduct = {name: name, image: image, price: price, description: desc, productType: productType, specs: specs, varnish: varnish};
         Product.create(newProduct, function(err, newlyCreatedProduct){
             if(err){

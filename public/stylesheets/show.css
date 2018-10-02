@@ -41,3 +41,7 @@
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
 }
+
+#arrowContainer .img-responsive {
+    max-height: 500px;
+}
