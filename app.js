@@ -28,10 +28,10 @@ var productRoutes = require("./routes/products"),
     // DATABASEURL=mongodb://localhost/eriks_website
 // process.env.DATABASEURL
 
-let dbUrl = process.env.DATABASEURL
-if (dbUrl === undefined) {
-    dbUrl = keys.DATABASEURL
-}
+// let dbUrl = process.env.DATABASEURL
+// if (dbUrl === undefined) {
+//     dbUrl = keys.DATABASEURL
+// }
 
 mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
