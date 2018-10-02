@@ -15,7 +15,7 @@
 
     <header class="jumbotron">
         <div class="container">
-            <h1>Furniture</h1>
+            <h1><%= productType[0].toUpperCase() + productType.substr(1)%></h1>
             <% if(currentUser && currentUser.isAdmin){ %>
             <a class="btn btn-primary" href=<%= `/products/${productType}/new` %>>Add a new product</a>
             <% } %>
