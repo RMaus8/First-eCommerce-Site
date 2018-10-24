@@ -1,24 +1,19 @@
-var express     = require("express"),
-    app         = express(),
+const express = require("express"),
+    app = express(),
     session = require("express-session"),
     csrf = require("csurf"),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
+    bodyParser = require("body-parser"),
+    mongoose = require("mongoose"),
     flash = require("connect-flash"),
-    passport    = require("passport"),
+    passport = require("passport"),
     LocalStrategy = require("passport-local"),
-    mailgun = require("mailgun"),
     methodOverride = require("method-override"),
     MongoStore = require("connect-mongo")(session),
-    multer = require("multer"),
-    path = require("path"),
-    Product = require("./models/product"),
     User = require("./models/user"),
-    seedDB = require("./seeds"),
-    keys = require("./keys")
+    keys = require("./keys");
     
     
-var productRoutes = require("./routes/products"),
+const productRoutes = require("./routes/products"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
 
@@ -40,7 +35,7 @@ app.use(session({
     cookie: { maxAge: 180 * 60 * 1000 }
 }));
 
-var csrfProtection = csrf();
+const csrfProtection = csrf();
 app.use(csrfProtection);
 
 app.use(passport.initialize());
