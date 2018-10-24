@@ -10,15 +10,15 @@ const express = require("express"),
     methodOverride = require("method-override"),
     MongoStore = require("connect-mongo")(session),
     User = require("./models/user"),
-    seedDB = require("./seeds.js"),
-    keys = require("./keys");
+    seedDB = require("./seeds.js");
+    // keys = require("./keys");
     
     
 const productRoutes = require("./routes/products"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
 
-mongoose.connect(process.env.DATABASEURL || keys.DATABASEURL, {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
