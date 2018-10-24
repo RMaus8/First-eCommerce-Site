@@ -10,13 +10,25 @@
             <li class="list-group-item">
                 <div class="container">
                     <div class="row">
-                        <div id="shopImage" class="thumbnail col-sm-6 colCell">
+                        <div id="shopImage" class="col-sm-6 colCell">
                             <img src="<%= product.item.image[0] %>">
                             <% if(product.clearance === true) { %>
                             <span class="label label-success">Cost: $<%= product.clearancePrice %></span>
                             <% } else { %>
                             <span class="label label-success">Cost: $<%= product.price %></span>
                             <% } %>
+                            <div>
+                                <strong><%= product.item.name %></strong>
+                
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">Remove... <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li class="dropdown-item"><a href="/reduce/<%= product.item._id %>">Remove 1 Unit</a></li>
+                                            <li class="dropdown-item"><a href="/remove/<%= product.item._id %>">Remove All</a></li>
+                                        </ul>
+                                </div>
+                            </div>
+                            
                         </div>
                         <div class="col-sm-6">
                             <strong>Description:</strong>
@@ -25,18 +37,10 @@
                             </p>
                         </div>
                     </div>
+                    <span class="badge">Quantity: <%= product.qty %></span>
                 </div>
-                <span class="badge">Quantity: <%= product.qty %></span>
-                <strong><%= product.item.name %></strong>
                 
-                <div class="btn-group">
-                    <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown">Remove... <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-item"><a href="/reduce/<%= product.item._id %>">Remove 1 Unit</a></li>
-                            <li class="dropdown-item"><a href="/remove/<%= product.item._id %>">Remove All</a></li>
-                        </ul>
-                    
-                </div>
+                
             </li>
             <% }); %>
         </ul>

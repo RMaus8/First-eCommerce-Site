@@ -1,4 +1,4 @@
-var mongoose = require("mongoose"),
+const mongoose = require("mongoose"),
     express = require("express"),
     router = express.Router(),
     multer = require("multer"),
@@ -31,11 +31,11 @@ const upload = multer({
 //function to check for filetypes
 function checkFileType(file, callback){
     //allowed ext
-    var filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /jpeg|jpg|png|gif/;
     //check ext
-    var extName = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extName = filetypes.test(path.extname(file.originalname).toLowerCase());
     //check mime
-    var mimetype = filetypes.test(file.mimetype);
+    const mimetype = filetypes.test(file.mimetype);
     //check that both are true
     if(mimetype && extName){
         return callback(null, true)
@@ -46,58 +46,46 @@ function checkFileType(file, callback){
     
 //Index Route
 router.get("/:prodType/", function(req, res){
-    var successMsg = req.flash("success")[0];
-    var perPage = 8;
-    var pageQuery = parseInt(req.query.page);
-    var pageNumber = pageQuery ? pageQuery : 1;
-    var noMatch = null;
+    const successMsg = req.flash("success")[0];
+    const perPage = 8;
+    const pageQuery = parseInt(req.query.page);
+    const pageNumber = pageQuery ? pageQuery : 1;
+    const noMatch = null;
     if(req.query.search){
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
         Product.find({name: regex, productType: req.params.prodType}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
             if(err){
                 console.log(err);
             } else {
-                Product.count({name: regex}).exec(function (err, count){
-                    if(err){
-                        console.log(err);
-                    } else {
-                        if(allProducts.length < 1){
-                            noMatch = "No products match that query, please try again.";
-                        }
-                        res.render("products/index", {
-                            products: allProducts,
-                            current: pageNumber,
-                            pages: Math.ceil(count / perPage),
-                            noMatch: noMatch,
-                            search: req.query.search,
-                            successMsg: successMsg,
-                            noMessage: !successMsg,
-                            productType: req.params.prodType
-                        });
-                    };
-                })
-            }
-        });
+                if(allProducts.length < 1){
+                    noMatch = "No products match that query, please try again.";
+                }
+                res.render("products/index", {
+                    products: allProducts,
+                    current: pageNumber,
+                    pages: Math.ceil(allProducts.length / perPage),
+                    noMatch: noMatch,
+                    search: req.query.search,
+                    successMsg: successMsg,
+                    noMessage: !successMsg,
+                    productType: req.params.prodType
+                });
+            };
+        })
     } else {
         Product.find({productType: req.params.prodType}).skip((perPage * pageNumber) - perPage).limit(perPage).exec(function(err, allProducts){
             if(err){
                 console.log(err)
             } else {
-                Product.count({}).exec(function (err, count){
-                    if(err){
-                        console.log(err);
-                    } else {
-                        res.render("products/index", {
-                            products: allProducts,
-                            current: pageNumber,
-                            pages: Math.ceil(count / perPage),
-                            noMatch: noMatch,
-                            search: false,
-                            successMsg: successMsg,
-                            noMessage: !successMsg,
-                            productType: req.params.prodType
-                        });
-                    };
+                res.render("products/index", {
+                    products: allProducts,
+                    current: pageNumber,
+                    pages: Math.ceil(allProducts.length / perPage),
+                    noMatch: noMatch,
+                    search: false,
+                    successMsg: successMsg,
+                    noMessage: !successMsg,
+                    productType: req.params.prodType
                 });
             }
         });
@@ -206,12 +194,9 @@ router.delete("/:prodType/:id", middleware.isLoggedInAdmin, function(req, res){
             fs.unlink('./public' + image, (error) => {
                 if (error) {
                     console.log(error)
-                } else {
-                    console.log('delete image')
                 }
             })
         })
-        
         if(err){
             console.log(err);
         } else {
@@ -221,9 +206,8 @@ router.delete("/:prodType/:id", middleware.isLoggedInAdmin, function(req, res){
 });
 
 router.get("/:prodType/add-to-cart/:id", function(req, res) {
-    var productId = req.params.id;
-    var cart = new Cart(req.session.cart ? req.session.cart : {});
-    
+    let productId = req.params.id;
+    let cart = new Cart(req.session.cart ? req.session.cart : {});
     Product.findById(productId, function (err, product){
         if(err){
             return res.redirect("/");

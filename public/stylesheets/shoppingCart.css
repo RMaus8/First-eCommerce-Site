@@ -1,0 +1,29 @@
+#cartName {
+    margin-left: 15%;
+}
+
+#shopImage {
+	height: auto;
+	max-width: 50%;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+}
+
+#shopDesc {
+	max-width: 90%;
+    height: auto;
+    text-overflow: ellipsis;
+}
+
+#shopImage img {
+	max-height: 500px;
+	max-width: 100%;
+	display: block;
+    margin: 0 auto;
+}
+
+#shopImage .label {
+    font-size: 1.5em;
+    margin: 20px;
+}

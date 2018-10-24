@@ -33,7 +33,7 @@
                         <% order.items.forEach(function(item){ %>
                             <li class="list-group-item productImg">
                                 <span class="badge">$<%= item.price %></span>
-                                <div class="thumbnailImage"><img src="<%= item.item.image %>"></div> <%= item.item.name %> | <%= item.qty %> Unit(s)
+                                <div class="thumbnailImage"><img src="<%= item.item.image[0] %>"></div> <%= item.item.name %> | <%= item.qty %> Unit(s)
                             </li>
                         <% }); %>
                     </ul>

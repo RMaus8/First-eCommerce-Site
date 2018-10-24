@@ -32,6 +32,8 @@
 	border-color: black;
 	display: flex;
 	flex-wrap: wrap;
+	flex-flow: column;
+	align-items: center;
 	/*margin-top: 30px;*/
 	border: none;
 }
@@ -41,8 +43,9 @@
 }
 
 .clearanceBox img {
-	width: 100%;
-	height: 100%;
+	/*width: 100%;*/
+	/*height: auto;*/
+	max-height: 400px;
 }
 
 .trendingBox {
@@ -52,6 +55,10 @@
 /*	flex-wrap: wrap;*/
 	margin-top: 30px;
 	border: none;
+}
+
+.trendingBox img {
+	max-height: 400px;
 }
 
 .trendingDiv h1{

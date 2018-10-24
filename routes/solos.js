@@ -1,31 +1,26 @@
-var mongoose = require("mongoose"),
+const mongoose = require("mongoose"),
     express = require("express"),
     Event = require("../models/event"),
     router = express.Router(),
-    mailgun = require("mailgun-js"),
+    keys = require("../keys"),
     middleware = require("../middleware");
 
-var api_key = process.env.MAILGUN_API_KEY;
-var DOMAIN = 'mg.bobbymdesigns.com';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
-
-
-// router.get("/about", function(req, res) {
-//     res.render("about/index");
-// });
+const api_key = process.env.MAILGUN_API_KEY;
+const DOMAIN = keys.domain;
+const mailgun = require('mailgun-js')({apiKey: api_key || keys.api_key, domain: DOMAIN});
 
 router.get("/contact", function(req, res) {
     res.render("contact");
 });
 
 router.post("/contact", function(req, res){
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var email = req.body.email;
-    var phone = req.body.phone;
-    var reason = req.body.contactReason;
-    var message = req.body.contactMessage;
-    var data = {
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const email = req.body.email;
+    const phone = req.body.phone;
+    const reason = req.body.contactReason;
+    const message = req.body.contactMessage;
+    const data = {
                 to: "rmausolf06@gmail.com",
                 from: "Contact Form <" + email +">",
                 subject: reason,
@@ -47,9 +42,9 @@ router.post("/contact", function(req, res){
 
 router.get("/events", function(req, res){
     Event.find(function(err, allEvents){
-        var events = []
-        var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const events = []
+        const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         allEvents.forEach(function(event){
             events.push(event);
         })
@@ -70,11 +65,11 @@ router.get("/new_event", function(req, res) {
 })
 
 router.post("/new_event", function(req, res){
-    var date = req.body.date;
-    var time = req.body.time;
-    var name = req.body.name;
-    var location = req.body.location;
-    var newEvent = {date: date, time: time, name: name, location: location}
+    const date = req.body.date;
+    const time = req.body.time;
+    const name = req.body.name;
+    const location = req.body.location;
+    const newEvent = {date: date, time: time, name: name, location: location}
     Event.create(newEvent, function(err, newlyCreatedEvent){
         if(err){
             req.flash("error", err);

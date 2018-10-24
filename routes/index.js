@@ -1,8 +1,7 @@
-var mongoose = require("mongoose"),
+const mongoose = require("mongoose"),
     express = require("express"),
     router = express.Router(),
     passport = require("passport"),
-    mailgun = require("mailgun.js"),
     middleware = require("../middleware"),
     User = require("../models/user"),
     Product = require("../models/product"),
@@ -11,32 +10,17 @@ var mongoose = require("mongoose"),
     nodemailer = require("nodemailer"),
     Order = require("../models/order"),
     csrf = require("csurf"),
-    crypto = require("crypto");
-
-var mailgun = require("mailgun-js");
-// var api_key = process.env.MAILGUN_API_KEY;
-// if(api_key === undefined) {
-//     api_key = keys.MAILGUN_API_KEY
-// }
-//MAILGUN_API_KEY=key-d10ff657dad15f5af086689c533cb4ed
-
-// keys()
-var DOMAIN = 'mg.bobbymdesigns.com';
-var mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN});
+    crypto = require("crypto"),
+    utility = require("../shared/utility"),
+    keys = require("../keys");
+    
+const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY || keys.api_key, domain: keys.domain});
 
 router.get("/", function(req, res){
     Product.find(function(err, allProducts){
-        var products = [];
-        var clearanceProducts = [];
-        allProducts.forEach(function(product){
-            products.push(product);
-            if(product.clearance === true){
-                clearanceProducts.push(product);
-            }
-        });
-        products.sort(function(a,b){
-            return b.timesPurchased - a.timesPurchased;
-        });
+        const productArrays = utility.createProdArray(allProducts)
+        const products = productArrays.prodArray
+        const clearanceProducts = productArrays.clearanceArray
         if(err){
             console.log(err);
         } else {
@@ -63,8 +47,8 @@ router.get("/register", function(req, res) {
 });
 
 router.post("/register", middleware.usernameToLowerCase, function(req, res){
-    var newUser = new User({username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email});
-    if(req.body.adminCode === "secretcode123") {
+    const newUser = new User({username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email});
+    if(req.body.adminCode === keys.adminCode) {
         newUser.isAdmin = true;
     }
     if(req.body.password === req.body.confirmPassword) {
@@ -82,7 +66,6 @@ router.post("/register", middleware.usernameToLowerCase, function(req, res){
         req.flash("error", "Passwords do not match!");
         res.redirect("/register");
     }
-    
 });
 
 router.get("/logout", function(req, res) {
@@ -98,7 +81,7 @@ router.post("/forgot", function(req, res) {
     async.waterfall([
         function(done){
             crypto.randomBytes(20, function(err, buf){
-                var token = buf.toString('hex');
+                const token = buf.toString('hex');
                 done(err, token);
             });
         },
@@ -108,22 +91,15 @@ router.post("/forgot", function(req, res) {
                     req.flash("error", "No account with that email address exists.");
                     return res.redirect("/forgot");
                 }
-                
                 user.resetPasswordToken = token;
                 user.resetPasswordExpires = Date.now() + 3600000 //1 hour
-                
                 user.save(function(err){
                     done(err, token, user);
                 });
             });
         },
         function(token, user, done) {
-            // var mg = mailgun.client({
-            //     username: 'api',
-            //     key: process.env.MAILGUN_API_KEY || 'key-d10ff657dad15f5af086689c533cb4ed',
-            //     public_key: process.env.MAILGUN_PUBLIC_KEY || ''
-            // });
-            var data = {
+            const data = {
                 to: user.email,
                 from: 'Password Reset <passwordreset@bobbymdesigns.com>',
                 subject: 'Account Password Reset',
@@ -182,13 +158,12 @@ router.post("/reset/:token", function(req, res){
             });
         },
         function(foundUser, done) {
-
-            var data = {
+            const data = {
                 to: foundUser.email,
                 from: 'Password Reset <passwordreset@bobbymdesigns.com>',
                 subject: 'Account Password Has Been Reset',
                 text: 'You are receiving this because you (or someone else) have just reset the password of the account associated with this email.' + '\n' +
-                    'If you did not reset your password, please let us know immediately so we may resolve the issue.'
+                    'If you did not reset your password, please const us know immediately so we may resolve the issue.'
             };
             mailgun.messages().send(data, function (error, body) {
         //     function(err){
@@ -202,9 +177,8 @@ router.post("/reset/:token", function(req, res){
 });
 
 router.get("/reduce/:id", function(req, res) {
-    var productId = req.params.id;
-    var cart = new Cart(req.session.cart ? req.session.cart : {});
-
+    const productId = req.params.id;
+    const cart = new Cart(req.session.cart ? req.session.cart : {});
     cart.reduceByOne(productId);
     if (cart.totalQty <= 0) {
         req.session.cart = null;
@@ -215,16 +189,14 @@ router.get("/reduce/:id", function(req, res) {
 });
 
 router.get("/remove/:id", function(req, res) {
-    var productId = req.params.id;
-    var cart = new Cart(req.session.cart ? req.session.cart : {});
-
+    const productId = req.params.id;
+    const cart = new Cart(req.session.cart ? req.session.cart : {});
     cart.removeItem(productId);
     if (cart.totalQty <= 0) {
         req.session.cart = null;
     } else {
         req.session.cart = cart;
     };
-    
     res.redirect("/shopping-cart");
         
 });
@@ -233,7 +205,7 @@ router.get("/shopping-cart", function(req, res) {
     if(!req.session.cart){
         return res.render("products/shopping-cart", {products: null});
     }
-    var cart = new Cart(req.session.cart);
+    const cart = new Cart(req.session.cart);
     res.render("products/shopping-cart", {products: cart.generateArray(), totalPrice: cart.totalPrice, checkoutPrice: cart.totalPrice * 100, totalQty: cart.totalQty});
 });
 
@@ -241,14 +213,11 @@ router.get("/shopping-cart", function(req, res) {
 router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
     if(!req.session.cart) {
         return res.render("product/shopping-cart");
-    } 
-
-    var cart = new Cart(req.session.cart);
-    var stripe = require("stripe")(
-      "sk_test_451bUetAuy87LnVAJx4oKyQy"
-    );
+    }
+    const cart = new Cart(req.session.cart);
+    const stripe = require("stripe")(keys.stripe);
     
-    var order = {
+    const order = {
           user: req.user,
           cart: req.session.cart,
           address: req.body.stripeShippingAddressLine1,
@@ -262,7 +231,6 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
             console.log(err);
         } 
     })
-    
     stripe.customers.create({
       email: req.body.stripeEmail,
       source: req.body.stripeToken
@@ -282,8 +250,8 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
               req.flash("success", "purchase successful");
               req.session.cart = null;
               order.items = cart.generateArray();
-              var orderArr = []
-              var productIds = []
+              const orderArr = []
+              const productIds = []
               order.items.forEach(function(item){
                   orderArr += item.item.name + "x" + item.qty + ". ";
                   productIds.push({product: item.item._id, qty: item.qty});
@@ -303,8 +271,7 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
                   });
                       
                 }); 
-              
-              var data = {
+              const data = {
                 to: "rmausolf06@gmail.com",
                 from: 'New Order <orders@bobbymdesigns.com>',
                 subject: 'A New Order Has Been Placed',
@@ -314,14 +281,8 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
                 "City: " + order.city +"\n" +
                 "State: " + order.state + " " + order.zip + "\n" +
                 "Products Ordered: " + orderArr
-                
                 };
-            
                 mailgun.messages().send(data, function (error, body) {
-            // function(err){
-                
-                
-                
                 res.redirect("/");
             });
           };
@@ -335,7 +296,7 @@ router.get("/profile", middleware.isLoggedIn, function(req, res){
         if(err){
             return req.flash("error", err);
         }
-        var cart;
+        let cart;
         orders.forEach(function(order){
             cart = new Cart(order.cart);
             order.items = cart.generateArray();
@@ -355,9 +316,9 @@ router.get("/clearance", middleware.isLoggedInAdmin,function(req, res) {
 })
 
 router.put('/clearance', function(req, res) {
-    var cPrice = req.body.clearancePrice;
-    var cBox = req.body.checkbox;
-    var pId = req.body.productID;
+    const cPrice = req.body.clearancePrice;
+    const cBox = req.body.checkbox;
+    const pId = req.body.productID;
     pId.forEach(function(pid){
         if(cBox !== undefined && cBox.length > 0){
             if(cBox.indexOf(pid) == -1){
@@ -384,21 +345,34 @@ router.put('/clearance', function(req, res) {
         }
     })
     if(cBox !== undefined && cBox.length > 0){
-        cBox.forEach(function(id){
-            Product.findById(id, function(err, foundProduct) {
-                if(err){
-                    console.log(err);
-                }
-
+        console.log(cBox)
+        if(!Array.isArray(cBox)) {
+            Product.findOne({_id: cBox}, function(err, foundProduct) {
                 foundProduct.clearance = true;
-                foundProduct.clearancePrice = cPrice[pId.indexOf(id)];
+                foundProduct.clearancePrice = cPrice[pId.indexOf(cBox)];
                 foundProduct.save(function(err){
                     if(err){
                         console.log(err);
                     }
                 })
             })
-        })
+        } else {
+            cBox.forEach(function(id){
+                Product.findById(id, function(err, foundProduct) {
+                    if(err){
+                        console.log(err);
+                    }
+    
+                    foundProduct.clearance = true;
+                    foundProduct.clearancePrice = cPrice[pId.indexOf(id)];
+                    foundProduct.save(function(err){
+                        if(err){
+                            console.log(err);
+                        }
+                    })
+                })
+            })
+        }
     }
     res.redirect('/');
 });

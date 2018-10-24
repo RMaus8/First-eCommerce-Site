@@ -366,6 +366,10 @@
 
 }
 
+.thumbnail {
+	box-shadow: -5px 5px 5px 2px rgba(0, 0, 0, 0.2)
+}
+
 .thumbnailImage {
 	height: auto;
 	width: 50px;
@@ -424,24 +428,6 @@
 
 #profileBtn {
 	margin-right: 10px;
-}
-
-#shopImage {
-	height: auto;
-	max-width: 50%;
-}
-
-#shopDesc {
-	max-width: 90%;
-    height: auto;
-    text-overflow: ellipsis;
-}
-
-#shopImage img {
-	max-height: 100%;
-	max-width: 100%;
-	display: block;
-    margin: 0 auto;
 }
 
 #viewBtn {

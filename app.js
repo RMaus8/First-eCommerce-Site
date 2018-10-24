@@ -14,25 +14,15 @@ var express     = require("express"),
     path = require("path"),
     Product = require("./models/product"),
     User = require("./models/user"),
-    seedDB = require("./seeds")
+    seedDB = require("./seeds"),
+    keys = require("./keys")
     
     
 var productRoutes = require("./routes/products"),
-    furnitureRoutes = require("./routes/products/furniture"),
-    homegoodsRoutes = require("./routes/products/homegoods"),
-    giftsRoutes = require("./routes/products/gifts"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
-    
-    // DATABASEURL=mongodb://localhost/eriks_website
-// process.env.DATABASEURL
 
-// let dbUrl = process.env.DATABASEURL
-// if (dbUrl === undefined) {
-//     dbUrl = keys.DATABASEURL
-// }
-
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL || keys.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -71,9 +61,6 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
-// app.use("/products/homegoods", productRoutes);
-// app.use("/products/gifts", productRoutes);
-// app.use("/products/furniture", furnitureRoutes);
 app.use("/products", productRoutes);
 app.use("/", soloRoutes);
 
