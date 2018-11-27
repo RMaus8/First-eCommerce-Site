@@ -2,12 +2,12 @@ const mongoose = require("mongoose"),
     express = require("express"),
     Event = require("../models/event"),
     router = express.Router(),
-    // keys = require("../keys"),
+    keys = require("../keys"),
     middleware = require("../middleware");
 
 const api_key = process.env.MAILGUN_API_KEY;
-const DOMAIN = 'mg.bobbymdesigns.com';
-const mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+const DOMAIN = keys.domain;
+const mailgun = require('mailgun-js')({apiKey: api_key || keys.api_key, domain: DOMAIN});
 
 router.get("/contact", function(req, res) {
     res.render("contact");

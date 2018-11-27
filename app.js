@@ -10,15 +10,14 @@ const express = require("express"),
     methodOverride = require("method-override"),
     MongoStore = require("connect-mongo")(session),
     User = require("./models/user"),
-    seedDB = require("./seeds.js");
-    // keys = require("./keys");
+    keys = require("./keys");
     
     
 const productRoutes = require("./routes/products"),
     soloRoutes = require("./routes/solos"),
     indexRoutes = require("./routes/index");
 
-mongoose.connect(process.env.DATABASEURL, {useMongoClient: true});
+mongoose.connect(process.env.DATABASEURL || keys.DATABASEURL, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -26,7 +25,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
-seedDB();
+// seedDB();
 
 app.use(session({
     secret: "Zola and Milo are my special dogs",

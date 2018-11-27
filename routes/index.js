@@ -11,9 +11,10 @@ const mongoose = require("mongoose"),
     Order = require("../models/order"),
     csrf = require("csurf"),
     crypto = require("crypto"),
-    utility = require("../shared/utility");
+    utility = require("../shared/utility"),
+    keys = require("../keys");
     
-const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY, domain: 'mg.bobbymdesigns.com'});
+const mailgun = require('mailgun-js')({apiKey: process.env.MAILGUN_API_KEY || keys.api_key, domain: keys.domain});
 
 router.get("/", function(req, res){
     Product.find(function(err, allProducts){
@@ -47,7 +48,7 @@ router.get("/register", function(req, res) {
 
 router.post("/register", middleware.usernameToLowerCase, function(req, res){
     const newUser = new User({username: req.body.username, firstName: req.body.firstName, lastName: req.body.lastName, email: req.body.email});
-    if(req.body.adminCode === "secretcode123") {
+    if(req.body.adminCode === keys.adminCode) {
         newUser.isAdmin = true;
     }
     if(req.body.password === req.body.confirmPassword) {
@@ -214,7 +215,7 @@ router.post("/shopping-cart", middleware.isLoggedIn, function(req, res) {
         return res.render("product/shopping-cart");
     }
     const cart = new Cart(req.session.cart);
-    const stripe = require("stripe")("sk_test_451bUetAuy87LnVAJx4oKyQy");
+    const stripe = require("stripe")(keys.stripe);
     
     const order = {
           user: req.user,
